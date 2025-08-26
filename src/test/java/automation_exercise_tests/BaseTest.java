@@ -1,6 +1,7 @@
 package automation_exercise_tests;
 
 import automation_exercise_pom.BrowserFactory;
+import automation_exercise_pom.helpers.CreateUserAccount;
 import automation_exercise_pom.helpers.Waiter;
 import automation_exercise_pom.pages.*;
 import org.openqa.selenium.WebDriver;
@@ -16,10 +17,13 @@ public abstract class BaseTest {
     protected ProductsPage productsPage;
     protected ProductDetailsPage productDetailsPage;
     protected CartPage cartPage;
+    protected CheckoutPage checkoutPage;
+    protected CreateUserAccount createUserAccount;
+    protected CartModal cartModal;
 
 
     @BeforeMethod(alwaysRun = true)
-    public void startBrowser(){
+    public synchronized void startBrowser(){
         BrowserFactory browserFactory = new BrowserFactory();
         WebDriver driver = browserFactory.getWebdriverInstance();
         BasePage.setDriver(driver);
@@ -36,11 +40,16 @@ public abstract class BaseTest {
         productsPage = new ProductsPage();
         productDetailsPage = new ProductDetailsPage();
         cartPage = new CartPage();
+        checkoutPage = new CheckoutPage();
+        createUserAccount = new CreateUserAccount();
+        cartModal =  new CartModal();
 
     }
 
     @AfterMethod(alwaysRun = true)
     public void quit(){
-        BasePage.getDriver().quit();
+        if(BasePage.getDriverThreadLocal() != null) {
+            BasePage.getDriver().quit();
+        }
     }
 }

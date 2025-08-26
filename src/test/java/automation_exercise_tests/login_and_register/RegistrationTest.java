@@ -1,9 +1,7 @@
-package automation_exercise_tests.registration;
+package automation_exercise_tests.login_and_register;
 
-import automation_exercise_pom.helpers.CreateUserAccount;
 import automation_exercise_pom.helpers.UserFactory;
 import automation_exercise_pom.models.UserRegistrationData;
-import automation_exercise_pom.pages.*;
 import automation_exercise_tests.BaseTest;
 import org.testng.annotations.Test;
 
@@ -18,7 +16,7 @@ public class RegistrationTest extends BaseTest {
                 .openLoginPage()
                 .signUpUser(UserFactory.userName);
 
-        CreateUserAccount
+        createUserAccount
                 .userRegisterWithDetails(user)
                 .assertSuccessfullyCreatedAccount()
                 .clickContinueButton()

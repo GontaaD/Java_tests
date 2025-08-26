@@ -1,12 +1,12 @@
 package automation_exercise_pom.helpers;
 
-import automation_exercise_pom.models.Title;
 import com.github.javafaker.Faker;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DataRandomizer {
     public static final Faker faker = new Faker();
@@ -17,9 +17,9 @@ public class DataRandomizer {
         return emailPart + "_" + faker.internet().emailAddress();
     }
 
-    public static Title getRandomTitle() {
-        Title[] titles = Title.values();
-        return titles[new Random().nextInt(titles.length)];
+    public static String getRandomTitle() {
+        List <String> titles = List.of("Mr", "Mrs");
+        return titles.get(new Random().nextInt(titles.size()));
     }
 
     public static String getRandomPassword() {
@@ -75,5 +75,29 @@ public class DataRandomizer {
 
     public static String getRandomMobile() {
         return faker.phoneNumber().phoneNumber();
+    }
+
+    public static String getRandomCardName() {
+        return faker.finance().creditCard();
+    }
+
+    public static String getRandomCardNumber() {
+        return faker.finance().creditCard();
+    }
+
+    public static String getRandomCVC() {
+        int cvc = ThreadLocalRandom.current().nextInt(100, 1000);
+        return String.valueOf(cvc);
+    }
+
+    public static String getRandomExpirationMonth() {
+        int monthInt = ThreadLocalRandom.current().nextInt(1, 13);
+        return String.format("%02d", monthInt);
+    }
+
+    public static String getRandomExpirationYear() {
+        int currentYear = java.time.Year.now().getValue();
+        int yearInt = ThreadLocalRandom.current().nextInt(currentYear + 1, currentYear + 6);
+        return String.valueOf(yearInt);
     }
 }

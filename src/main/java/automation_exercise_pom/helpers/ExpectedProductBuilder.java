@@ -1,6 +1,7 @@
 package automation_exercise_pom.helpers;
 
 import automation_exercise_pom.models.ProductInCart;
+import io.qameta.allure.Step;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class ExpectedProductBuilder {
                 .totalPrice("Rs. 400")
                 .build());
     }
+
+    @Step("Get expected product")
     public static ProductInCart getExpectedProduct(String key, int quantity) {
         ProductInCart base =  expectedProducts.get(key);
         if (base == null) {
@@ -38,19 +41,4 @@ public class ExpectedProductBuilder {
                 .totalPrice("Rs. " + totalPrice)
                 .build();
     }
-
-
-
-
-
-
-
-//    public String totalPriceCalculator(String expectedPrice, String  expectedQuantity){
-//        String formatPrice = expectedPrice.replace("Rs.", "").trim();
-//        Integer intPrice = Integer.parseInt(formatPrice);
-//        Integer intQuantity = Integer.parseInt(expectedQuantity);
-//        int intTotalPrice = intPrice * intQuantity;
-//        String stringTotalPrice = Integer.toString(intTotalPrice);
-//        return "Rs. " + stringTotalPrice;
-//    }
 }

@@ -1,4 +1,4 @@
-package automation_exercise_tests.products;
+package automation_exercise_tests.cart;
 
 import automation_exercise_pom.helpers.ExpectedProductBuilder;
 import automation_exercise_pom.models.Product;
@@ -34,16 +34,13 @@ public class AddToCartProductTest extends BaseTest {
                 .getAllProductsInCart();
 
         ProductInCart expectedFirstProductInCart = ExpectedProductBuilder.getExpectedProduct("blueTop", 1);
-
         ProductInCart actualFirstProductInCart = cartPage.filterProducts(allProductsInCart, "Blue Top");
 
-        cartPage.assertProductInCartToBeEqual(actualFirstProductInCart, expectedFirstProductInCart);
+        cartPage.assertProductsToBeEqual(actualFirstProductInCart, expectedFirstProductInCart);
 
         ProductInCart expectedSecondProductInCart = ExpectedProductBuilder.getExpectedProduct("menTshirt", 1);
-
         ProductInCart actualSecondProductInCart = cartPage.filterProducts(allProductsInCart, "Men Tshirt");
 
-        cartPage.assertProductInCartToBeEqual(actualSecondProductInCart, expectedSecondProductInCart);
-
+        cartPage.assertProductsToBeEqual(actualSecondProductInCart, expectedSecondProductInCart);
     }
 }

@@ -1,6 +1,6 @@
 package automation_exercise_pom.pages;
 
-import automation_exercise_pom.models.Title;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
@@ -26,13 +26,10 @@ public class CreateAccountPage extends BasePage {
     private final By mobileNumberInputLocator = By.xpath("//input[@id='mobile_number']");
     private final By createAccountButtonLocator = By.xpath("//button[@data-qa='create-account']");
 
-    public CreateAccountPage assertCreateAccountPageSuccessfullyLoaded(){
-        waiter.waitUntilVisibilityOfElementLocated(createAccountInfoTitleLocator);
-        return this;
-    }
-
-    public CreateAccountPage clickGenderRadioButton(Title title){
-        if(title.equals(Title.Mr)){
+    @Step("Click gender radio button")
+    public CreateAccountPage clickGenderRadioButton(String title){
+        logger.info("Click [gender: {}] for registration",  title);
+        if(title.equals("Mr")){
             waiter.waitUntilElementClickable(mrRadioButtonLocator).click();
         }else{
             waiter.waitUntilVisibilityOfElementLocated(mrsRadioButtonLocator).click();
@@ -40,89 +37,130 @@ public class CreateAccountPage extends BasePage {
         return this;
     }
 
+    @Step("Password input")
     public CreateAccountPage passwordInput(String value){
+        logger.info("Input [password] for registration");
         waiter.waitUntilVisibilityOfElementLocated(passwordInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Select days")
     public CreateAccountPage selectDays(String value){
+        logger.info("Select [day of birth: {}] for registration",  value);
         new Select(waiter.waitUntilVisibilityOfElementLocated(daysSelectLocator)).selectByVisibleText(value);
         return this;
     }
 
+    @Step("Select months")
     public CreateAccountPage selectMonths(String value){
+        logger.info("Select [months of birth: {}] for registration",  value);
         new Select(waiter.waitUntilVisibilityOfElementLocated(monthsSelectLocator)).selectByVisibleText(value);
         return this;
     }
 
+    @Step("Select years")
     public CreateAccountPage selectYears(String value){
+        logger.info("Select [years of birth: {}] for registration",  value);
         new Select(waiter.waitUntilVisibilityOfElementLocated(yearsSelectLocator)).selectByVisibleText(value);
         return this;
     }
 
+    @Step("Click newsletter")
     public CreateAccountPage clickNewsletter(){
+        logger.info("Click [News letter] checkbox for registration");
         waiter.waitUntilElementClickable(newsletterButtonLocator).click();
         return this;
     }
 
+    @Step("Click optin")
     public CreateAccountPage clickOptin(){
+        logger.info("Click [Optin] checkbox for registration");
         waiter.waitUntilElementClickable(optinButtonLocator).click();
         return this;
     }
 
+    @Step("First name input")
     public CreateAccountPage firstNameInput(String value){
+        logger.info("Input [first name: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(firstNameInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Last name input")
     public CreateAccountPage lastNameInput(String value){
+        logger.info("Input [last name: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(lastNameInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Company input")
     public CreateAccountPage companyInput(String value){
+        logger.info("Input [company: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(companyInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Address1 input")
     public CreateAccountPage address1Input(String value){
+        logger.info("Input [address 1: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(address1InputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Address2 input")
     public CreateAccountPage address2Input(String value){
+        logger.info("Input [address 2: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(address2InputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Select country")
     public CreateAccountPage selectCountry(String value){
+        logger.info("Select [country: {}] for registration",  value);
         new Select(waiter.waitUntilVisibilityOfElementLocated(countrySelectLocator)).selectByVisibleText(value);
         return this;
     }
 
+    @Step("State input")
     public CreateAccountPage stateInput(String value){
+        logger.info("Input [state: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(stateInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("City input")
     public CreateAccountPage cityInput(String value){
+        logger.info("Input [city: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(cityInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Zipcode input")
     public CreateAccountPage zipcodeInput(String value){
+        logger.info("Input [zipcode: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(zipcodeInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Mobile number input")
     public CreateAccountPage mobileNumberInput(String value){
+        logger.info("Input [mobile number: {}] for registration",  value);
         waiter.waitUntilVisibilityOfElementLocated(mobileNumberInputLocator).sendKeys(value);
         return this;
     }
 
+    @Step("Click create account button")
     public CreatedAccountPage clickCreateAccountButton(){
+        logger.info("Click [Create Account] button");
         waiter.waitUntilElementClickable(createAccountButtonLocator).click();
         return new CreatedAccountPage();
+    }
+
+    @Step("Assert create account page successfully loaded")
+    public CreateAccountPage assertCreateAccountPageSuccessfullyLoaded(){
+        waiter.waitUntilVisibilityOfElementLocated(createAccountInfoTitleLocator);
+        logger.info("Assert: create account page successfully loaded [PASSED]");
+        return this;
     }
 
 }

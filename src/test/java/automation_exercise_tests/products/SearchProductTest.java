@@ -2,13 +2,15 @@ package automation_exercise_tests.products;
 
 import automation_exercise_pom.models.Product;
 import automation_exercise_tests.BaseTest;
-import org.testng.annotations.BeforeMethod;
+import io.qameta.allure.Step;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class SearchProductTest extends BaseTest {
+
     @Test
+    @Step("Search products test start")
     public void searchProductsTest(){
         mainPage
                 .assertMainPageSuccessfullyLoaded()
@@ -19,8 +21,7 @@ public class SearchProductTest extends BaseTest {
                 .assertProductsCountToBe(2)
                 .getAllProducts();
 
-        Product actualfirstProduct = allProducts.get(0);
-
+        Product actualfirstProduct = allProducts.getFirst();
         Product firstExpectedProduct = Product.builder()
                 .name("Sleeves Printed Top - White")
                 .price("Rs. 499")
@@ -29,7 +30,6 @@ public class SearchProductTest extends BaseTest {
         productsPage.assertProductDetailsToBeEqual(actualfirstProduct, firstExpectedProduct);
 
         Product actualsecondProduct = allProducts.get(1);
-
         Product secondExpectedProduct = Product.builder()
                 .name("Printed Off Shoulder Top - White")
                 .price("Rs. 315")

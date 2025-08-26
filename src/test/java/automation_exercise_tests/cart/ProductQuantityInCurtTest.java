@@ -1,9 +1,10 @@
-package automation_exercise_tests.products;
+package automation_exercise_tests.cart;
 
 import automation_exercise_pom.helpers.ExpectedProductBuilder;
 import automation_exercise_pom.models.Product;
 import automation_exercise_pom.models.ProductInCart;
 import automation_exercise_tests.BaseTest;
+import io.qameta.allure.Step;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ProductQuantityInCurtTest extends BaseTest {
 
     @Test
+    @Step("Product quantity in curt test start")
     public void productQuantityInCurtTest() {
         mainPage
                 .assertMainPageSuccessfullyLoaded()
@@ -38,7 +40,6 @@ public class ProductQuantityInCurtTest extends BaseTest {
 
         ProductInCart actualProductInCart = allProductsInCart.getFirst();
 
-
-        cartPage.assertProductInCartToBeEqual(actualProductInCart, expectedProductInCart);
+        cartPage.assertProductsToBeEqual(actualProductInCart, expectedProductInCart);
     }
 }

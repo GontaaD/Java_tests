@@ -1,0 +1,30 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="UI suite" parallel="tests" thread-count="3">
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+    <test name="Cart">
+        <classes>
+            <class name="automation_exercise_tests.cart.AddToCartProductTest"/>
+            <class name="automation_exercise_tests.cart.DeleteProductFromCartTest"/>
+            <class name="automation_exercise_tests.cart.ProductQuantityInCurtTest"/>
+        </classes>
+    </test>
+
+    <test name="Login / Register">
+        <classes>
+            <class name="automation_exercise_tests.login_and_register.LoginLogoutTest"/>
+            <class name="automation_exercise_tests.login_and_register.RegistrationTest"/>
+            <class name="automation_exercise_tests.login_and_register.AllureTest"/>
+        </classes>
+    </test>
+
+    <test name="Products">
+        <classes>
+            <class name="automation_exercise_tests.products.PlaceOrderTest"/>
+            <class name="automation_exercise_tests.products.ProductsDetailsTest"/>
+            <class name="automation_exercise_tests.products.SearchProductTest"/>
+        </classes>
+    </test>
+</suite>

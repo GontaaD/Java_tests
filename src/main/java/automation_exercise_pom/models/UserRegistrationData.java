@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class UserRegistrationData {
-    private Title title;
+    private String title;
     private String password;
     private String day;
     private String month;
