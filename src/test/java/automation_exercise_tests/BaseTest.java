@@ -1,55 +1,42 @@
 package automation_exercise_tests;
 
-import automation_exercise_pom.BrowserFactory;
-import automation_exercise_pom.helpers.CreateUserAccount;
-import automation_exercise_pom.helpers.Waiter;
+import automation_exercise_pom.helpers.MainMenu;
 import automation_exercise_pom.pages.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 
+import java.time.Duration;
+
+@Listeners({
+        automation_exercise_tests.TestListener.class
+})
 public abstract class BaseTest {
-    protected MainPage mainPage;
-    protected LoginPage loginPage;
-    protected DeletedAccountPage deletedAccountPage;
-    protected CreatedAccountPage createdAccountPage;
-    protected CreateAccountPage createAccountPage;
-    protected ProductsPage productsPage;
-    protected ProductDetailsPage productDetailsPage;
-    protected CartPage cartPage;
-    protected CheckoutPage checkoutPage;
-    protected CreateUserAccount createUserAccount;
-    protected CartModal cartModal;
-
+    protected MainMenu mainMenu;
+    protected Logger logger;
 
     @BeforeMethod(alwaysRun = true)
     public synchronized void startBrowser(){
-        BrowserFactory browserFactory = new BrowserFactory();
-        WebDriver driver = browserFactory.getWebdriverInstance();
+        WebDriver driver = new ChromeDriver();
         BasePage.setDriver(driver);
 
-        Waiter waiter = new Waiter(BasePage.getDriver());
         BasePage.getDriver().get("https://www.automationexercise.com/");
-        waiter.waitUntilUrlToBe("https://www.automationexercise.com/");
+        new WebDriverWait(driver, Duration.ofSeconds(3))
+                .until(ExpectedConditions.urlToBe("https://www.automationexercise.com/"));
 
-        mainPage = new MainPage();
-        loginPage = new LoginPage();
-        deletedAccountPage = new DeletedAccountPage();
-        createdAccountPage = new CreatedAccountPage();
-        createAccountPage = new CreateAccountPage();
-        productsPage = new ProductsPage();
-        productDetailsPage = new ProductDetailsPage();
-        cartPage = new CartPage();
-        checkoutPage = new CheckoutPage();
-        createUserAccount = new CreateUserAccount();
-        cartModal =  new CartModal();
-
+        mainMenu = new MainMenu();
+        logger = LoggerFactory.getLogger(this.getClass());
     }
 
     @AfterMethod(alwaysRun = true)
     public void quit(){
-        if(BasePage.getDriverThreadLocal() != null) {
+//        if(BasePage.getDriverThreadLocal() != null) {
             BasePage.getDriver().quit();
-        }
     }
 }

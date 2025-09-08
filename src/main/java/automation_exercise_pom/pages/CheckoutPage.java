@@ -1,20 +1,18 @@
 package automation_exercise_pom.pages;
 
+import automation_exercise_pom.helpers.AdsHelper;
 import automation_exercise_pom.models.CheckoutData;
 import automation_exercise_pom.models.UserRegistrationData;
 import automation_exercise_pom.pages.interfaces.IProductInCart;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
 
 public class CheckoutPage extends BasePage implements IProductInCart {
+    AdsHelper adsHelper = new AdsHelper();
     private final By deliveryAddressContainerLocator = By.xpath("//ul[@id='address_delivery']");
     private final By deliveryNameLocator = By.xpath(".//li[contains(@class, 'address_firstname')]");
     private final By deliveryCompanyLocator = By.xpath(".//li[contains(@class, 'address_address1')][1]");
@@ -54,15 +52,18 @@ public class CheckoutPage extends BasePage implements IProductInCart {
 
     @Step("Click payment button")
     public PaymentPage clickPaymentButton(){
+        adsHelper.removeAds();
         logger.info("Clicking [payment] button");
-        waiter.waitUntilVisibilityOfElementLocated(paymentButtonLocator).click();
+        waitUntilVisibilityOfElementLocated(paymentButtonLocator).click();
         return new PaymentPage();
     }
 
-    @Step("Assert delivery address to be equal")
-    public CheckoutPage assertDeliveryAddressToBeEqual(CheckoutData actual, CheckoutData expected){
+    @Step("Is delivery address to be equal")
+    public boolean isDeliveryAddressToBeEqual(CheckoutData actual, CheckoutData expected){
+        Allure.addAttachment("Actual list", actual.toString());
+        Allure.addAttachment("Expected list", expected.toString());
         logger.info(String.format("""
-                        Assert: delivery address to be equal
+                        Is delivery address to be equal
                          %-8s : actual: [%-50s] | expected: [%-50s]
                          %-8s : actual: [%-50s] | expected: [%-50s]
                          %-8s : actual: [%-50s] | expected: [%-50s]
@@ -79,20 +80,13 @@ public class CheckoutPage extends BasePage implements IProductInCart {
                 "Country", actual.getCountry(), expected.getCountry(),
                 "Phone", actual.getPhone(), expected.getPhone()
         ));
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .isEqualTo(expected);
-        logger.info("Assert result: [PASSED]");
-        return this;
-    }
-
-    @Step("Assert product in cart to be")
-    public CheckoutPage assertProductInCartToBe(int count){
-        new WebDriverWait(getDriver(), Duration.ofSeconds(2))
-                .until(d -> !d.findElements(productInCartContainerLocator).isEmpty());
-        List<WebElement> elements = getDriver().findElements(productInCartContainerLocator);
-        assertEquals(elements.size(), count, "Number of products in cart does not match expected");
-        logger.info("Assert: product in cart to be: [{}] [PASSED]",  count);
-        return this;
+        try {
+            assertThat(actual)
+                    .usingRecursiveComparison()
+                    .isEqualTo(expected);
+            return true;
+        }  catch (AssertionError e) {
+            return  false;
+        }
     }
 }

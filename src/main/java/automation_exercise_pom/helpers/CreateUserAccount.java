@@ -1,15 +1,17 @@
 package automation_exercise_pom.helpers;
 
 import automation_exercise_pom.models.UserRegistrationData;
+import automation_exercise_pom.pages.StatusPage;
 import automation_exercise_pom.pages.CreateAccountPage;
-import automation_exercise_pom.pages.CreatedAccountPage;
 import io.qameta.allure.Step;
 
 public class CreateUserAccount {
-    private final CreateAccountPage createAccountPage =  new CreateAccountPage();
+    AdsHelper adsHelper = new AdsHelper();
+    private final CreateAccountPage createAccountPage = new CreateAccountPage();
 
     @Step("userRegisterWithDetails")
-    public CreatedAccountPage userRegisterWithDetails(UserRegistrationData user){
+    public StatusPage userRegisterWithDetails(UserRegistrationData user){
+       adsHelper.removeAds();
        return createAccountPage
                 .clickGenderRadioButton(user.getTitle())
                 .passwordInput(user.getPassword())

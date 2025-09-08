@@ -48,6 +48,4 @@ public interface IProductInCart {
         return allProductInCart.stream().filter(p->p.getName().equals(expectedName)).findFirst()
                 .orElseThrow(() -> new RuntimeException("Product not found: " + expectedName));
     }
-
-
 }

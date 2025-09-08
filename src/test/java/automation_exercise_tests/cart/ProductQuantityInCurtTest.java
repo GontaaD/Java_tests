@@ -3,28 +3,37 @@ package automation_exercise_tests.cart;
 import automation_exercise_pom.helpers.ExpectedProductBuilder;
 import automation_exercise_pom.models.Product;
 import automation_exercise_pom.models.ProductInCart;
+import automation_exercise_pom.pages.CartPage;
+import automation_exercise_pom.pages.ProductDetailsPage;
+import automation_exercise_pom.pages.ProductsPage;
 import automation_exercise_tests.BaseTest;
-import io.qameta.allure.Step;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ProductQuantityInCurtTest extends BaseTest {
+    ProductsPage productsPage;
+    ProductDetailsPage productDetailsPage;
+    CartPage cartPage;
 
     @Test
-    @Step("Product quantity in curt test start")
     public void productQuantityInCurtTest() {
-        mainPage
-                .assertMainPageSuccessfullyLoaded()
-                .openProductsPage();
+        productsPage =  new ProductsPage();
+        productDetailsPage =  new ProductDetailsPage();
+        cartPage =  new CartPage();
+
+        mainMenu
+                .clickProductPageButton();
 
         List<Product> allProducts = productsPage
-                .assertProductsCountToBe(34)
                 .getAllProducts();
 
-        allProducts
-                .getFirst()
-                .clickViewProductButton();
+        Product product = allProducts.getFirst();
+
+        productsPage
+                .clickViewProductButton(product);
 
         ProductInCart expectedProductInCart = ExpectedProductBuilder
                 .getExpectedProduct("blueTop", 4);
@@ -34,12 +43,17 @@ public class ProductQuantityInCurtTest extends BaseTest {
                 .clickAddToCart()
                 .clickViewCartButton();
 
+        assertThat(cartPage.getProductCountInCart())
+                .as("ERROR: Products count is not as expected")
+                .isEqualTo(1);
+
         List<ProductInCart> allProductsInCart = cartPage
-                .assertProductInCartToBe(1)
                 .getAllProductsInCart();
 
         ProductInCart actualProductInCart = allProductsInCart.getFirst();
 
-        cartPage.assertProductsToBeEqual(actualProductInCart, expectedProductInCart);
+        assertThat(cartPage.isProductsToBeEqual(actualProductInCart, expectedProductInCart))
+                .as("ERROR: products are not equal")
+                .isTrue();
     }
 }

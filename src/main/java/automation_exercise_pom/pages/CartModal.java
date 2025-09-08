@@ -10,13 +10,13 @@ public class CartModal extends BasePage{
     @Step("Click close modal button")
     public void clickCloseModalButton(){
         logger.info("Click [close modal] button");
-        waiter.waitUntilElementClickable(closeModalButtonLocator).click();
+        waitUntilElementClickable(closeModalButtonLocator).click();
     }
 
     @Step("Click view cart button")
     public CartPage clickViewCartButton(){
         logger.info("Click [view cart] button");
-        waiter.waitUntilElementClickable(viewCartButtonLocator).click();
+        waitUntilElementClickable(viewCartButtonLocator).click();
         return new CartPage();
     }
 }

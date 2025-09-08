@@ -1,19 +1,18 @@
 package automation_exercise_pom.pages;
 
+import automation_exercise_pom.helpers.AdsHelper;
 import automation_exercise_pom.models.Product;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductsPage extends BasePage{
-    private final By allProductsTitleLocator = By.xpath("//h2[@class='title text-center']");
+    AdsHelper adsHelper = new AdsHelper();
     private final By searchProductInputLocator = By.xpath("//input[@id='search_product']");
     private final By submitSearchButtonLocator = By.xpath("//button[@id='submit_search']");
     private final By productContainerLocator = By.xpath("//div[@class='product-image-wrapper']");
@@ -70,43 +69,38 @@ public class ProductsPage extends BasePage{
     @Step("Set search product")
     public ProductsPage setSearchProduct(String text){
         logger.info("Set search product name: [{}]", text);
-        waiter.waitUntilVisibilityOfElementLocated(searchProductInputLocator).sendKeys(text);
+        waitUntilVisibilityOfElementLocated(searchProductInputLocator).sendKeys(text);
         return this;
     }
 
     @Step("Click submit search button")
     public ProductsPage clickSubmitSearchButton(){
         logger.info("Click [submit search] button");
-        waiter.waitUntilElementClickable(submitSearchButtonLocator).click();
+        waitUntilElementClickable(submitSearchButtonLocator).click();
         return this;
     }
 
-    @Step("Search product")
-    public ProductsPage searchProduct(String text){
-        return this
-                .setSearchProduct(text)
-                .clickSubmitSearchButton();
+    @Step("Click view product button")
+    public ProductDetailsPage clickViewProductButton(Product product){
+        logger.info("Click [view product] button");
+        product.getViewProductButton().click();
+        adsHelper.removeAds();
+        return new ProductDetailsPage();
     }
 
-    @Step("Assert products page successfully loaded")
-    public ProductsPage assertProductsPageSuccessfullyLoaded(){
-        waiter.waitUntilVisibilityOfElementLocated(allProductsTitleLocator);
-        logger.info("Assert: products page successfully loaded: [PASSED]");
-        return this;
+    @Step("Click add to cart button")
+    public CartModal clickAddToCartButton(Product product){
+        logger.info("Click [add to cart] button");
+        adsHelper.removeAds();
+        product.getAddToCartButton().click();
+        return new CartModal();
     }
 
-    @Step("Assert products count to be")
-    public ProductsPage assertProductsCountToBe(int count){
-        waiter.waitUntilCountElementsToBe(productContainerLocator, count);
-        logger.info("Assert: product count to be [{}]",  count);
-        return this;
-    }
-
-    @Step("Assert product details to be equal")
-    public ProductsPage assertProductDetailsToBeEqual(Product actualProduct, Product expectedProduct){
+    @Step("Is product details to be equal?")
+    public boolean isProductDetailsToBeEqual(Product actualProduct, Product expectedProduct){
         logger.info(String.format(
                 """
-                        Assert: product details to be equal
+                        Is product details to be equal
                          %-12s : %-8s
                          %-12s : %-8s
                          %-12s : %-8s
@@ -119,12 +113,15 @@ public class ProductsPage extends BasePage{
                 "Price", actualProduct.getPrice(), expectedProduct.getPrice(),
                 "Name", actualProduct.getName(), expectedProduct.getName()
         ));
-        assertThat(actualProduct.getImage()).isNotNull();
-        assertThat(actualProduct.getAddToCartButton()).isNotNull();
-        assertThat(actualProduct.getViewProductButton()).isNotNull();
-        assertThat(actualProduct.getPrice()).isEqualTo(expectedProduct.getPrice());
-        assertThat(actualProduct.getName()).isEqualTo(expectedProduct.getName());
-        logger.info("Assert result: [PASSED]");
-        return this;
+        try {
+            assertThat(actualProduct.getImage()).isNotNull();
+            assertThat(actualProduct.getAddToCartButton()).isNotNull();
+            assertThat(actualProduct.getViewProductButton()).isNotNull();
+            assertThat(actualProduct.getPrice()).isEqualTo(expectedProduct.getPrice());
+            assertThat(actualProduct.getName()).isEqualTo(expectedProduct.getName());
+            return true;
+        }  catch (AssertionError e) {
+            return false;
+        }
     }
 }

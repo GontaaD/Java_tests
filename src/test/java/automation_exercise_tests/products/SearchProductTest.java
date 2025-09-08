@@ -1,40 +1,47 @@
 package automation_exercise_tests.products;
 
 import automation_exercise_pom.models.Product;
+import automation_exercise_pom.pages.ProductsPage;
 import automation_exercise_tests.BaseTest;
-import io.qameta.allure.Step;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class SearchProductTest extends BaseTest {
+    ProductsPage productsPage;
 
     @Test
-    @Step("Search products test start")
     public void searchProductsTest(){
-        mainPage
-                .assertMainPageSuccessfullyLoaded()
-                .openProductsPage();
+        productsPage =  new ProductsPage();
+
+        mainMenu
+                .clickProductPageButton();
 
         List<Product> allProducts = productsPage
-                .searchProduct("printed")
-                .assertProductsCountToBe(2)
+                .setSearchProduct("printed")
+                .clickSubmitSearchButton()
                 .getAllProducts();
 
-        Product actualfirstProduct = allProducts.getFirst();
+        Product actualFirstProduct = allProducts.getFirst();
         Product firstExpectedProduct = Product.builder()
                 .name("Sleeves Printed Top - White")
                 .price("Rs. 499")
                 .build();
 
-        productsPage.assertProductDetailsToBeEqual(actualfirstProduct, firstExpectedProduct);
+        assertThat(productsPage.isProductDetailsToBeEqual(actualFirstProduct, firstExpectedProduct))
+                .as("ERROR: Product details are not equals")
+                .isTrue();
 
-        Product actualsecondProduct = allProducts.get(1);
+        Product actualSecondProduct = allProducts.get(1);
         Product secondExpectedProduct = Product.builder()
                 .name("Printed Off Shoulder Top - White")
                 .price("Rs. 315")
                 .build();
 
-        productsPage.assertProductDetailsToBeEqual(actualsecondProduct, secondExpectedProduct);
+        assertThat(productsPage.isProductDetailsToBeEqual(actualSecondProduct, secondExpectedProduct))
+                .as("ERROR: Product details are not equals")
+                .isTrue();
     }
 }

@@ -1,12 +1,14 @@
 package automation_exercise_pom.pages;
 
+import automation_exercise_pom.helpers.AdsHelper;
+import automation_exercise_pom.helpers.MainMenu;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
-import static automation_exercise_pom.helpers.DataRandomizer.*;
+import java.time.Duration;
 
 public class LoginPage extends BasePage {
-    String randomEmail = getRandomEmail();
+    AdsHelper adsHelper  = new AdsHelper();
     private final By loginTitleLocator = By.xpath("//h2[text()='New User Signup!']");
     private final By nameInputLocator = By.xpath("//input[@data-qa='signup-name']");
     private final By emailRegistrationInputLocator = By.xpath("//input[@data-qa='signup-email']");
@@ -18,69 +20,51 @@ public class LoginPage extends BasePage {
     @Step("Input name")
     public LoginPage inputName(String name){
         logger.info("Input name [{}] for signup: ", name);
-        waiter.waitUntilVisibilityOfElementLocated(nameInputLocator).sendKeys(name);
+        waitUntilVisibilityOfElementLocated(nameInputLocator).sendKeys(name);
         return this;
     }
 
     @Step("Input registration email")
     public LoginPage inputRegistrationEmail(String email) {
         logger.info("Input email [{}] for signup: ", email);
-        waiter.waitUntilVisibilityOfElementLocated(emailRegistrationInputLocator).sendKeys(email);
+        waitUntilVisibilityOfElementLocated(emailRegistrationInputLocator).sendKeys(email);
         return this;
     }
 
     @Step("Click signup button")
     public CreateAccountPage clickSignupButton(){
         logger.info("Click [signup button] button");
-        waiter.waitUntilVisibilityOfElementLocated(signupButtonLocator).click();
-        removeAds();
+        waitUntilVisibilityOfElementLocated(signupButtonLocator).click();
+        adsHelper.removeAds();
         return new CreateAccountPage();
-    }
-
-    @Step("Sign up user")
-    public CreateAccountPage signUpUser(String userName) {
-        return this
-                .inputName(userName)
-                .inputRegistrationEmail(randomEmail)
-                .clickSignupButton()
-                .assertCreateAccountPageSuccessfullyLoaded();
     }
 
     @Step("Input login email")
     public LoginPage inputLoginEmail(String email) {
         logger.info("Set login email: [{}]", email);
-        waiter.waitUntilVisibilityOfElementLocated(emailLoginInputLocator).sendKeys(email);
+        waitUntilVisibilityOfElementLocated(emailLoginInputLocator).sendKeys(email);
         return this;
     }
 
     @Step("Input login password")
     public LoginPage inputLoginPassword(String password) {
         logger.info("Set login password");
-        waiter.waitUntilVisibilityOfElementLocated(passwordLoginInputLocator).sendKeys(password);
+        waitUntilVisibilityOfElementLocated(passwordLoginInputLocator).sendKeys(password);
         return this;
     }
 
     @Step("Click login button")
-    public MainPage clickLoginButton(){
+    public MainMenu clickLoginButton(){
         logger.info("Click [login] button");
-        waiter.waitUntilElementClickable(loginButtonLocator).click();
-        removeAds();
-        return new MainPage();
+        waitUntilElementClickable(loginButtonLocator).click();
+        adsHelper.removeAds();
+        return new MainMenu();
     }
 
-    @Step("Login user")
-    public MainPage loginUser(String email, String password) {
-        return this
-                .inputLoginEmail(email)
-                .inputLoginPassword(password)
-                .clickLoginButton();
-    }
-
-    @Step("Assert login page successfully loaded")
-    public LoginPage assertLoginPageSuccessfullyLoaded(){
-        waiter.waitUntilVisibilityOfElementLocated(loginTitleLocator);
-        logger.info("Assert: login page successfully loaded [PASSED]");
-        return this;
+    @Step("Is login page successfully loaded?")
+    public boolean isLoginPageSuccessfullyLoaded(){
+        logger.info("Is login page successfully loaded?");
+        return waitUntilVisibilityOfElementLocated(loginTitleLocator, Duration.ofSeconds(1));
     }
 
 }

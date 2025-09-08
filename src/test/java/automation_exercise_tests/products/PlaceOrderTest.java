@@ -1,65 +1,110 @@
 package automation_exercise_tests.products;
 
+import automation_exercise_pom.helpers.CreateUserAccount;
 import automation_exercise_pom.helpers.ExpectedProductBuilder;
 import automation_exercise_pom.helpers.UserFactory;
 import automation_exercise_pom.models.CheckoutData;
 import automation_exercise_pom.models.Product;
 import automation_exercise_pom.models.ProductInCart;
 import automation_exercise_pom.models.UserRegistrationData;
+import automation_exercise_pom.pages.*;
 import automation_exercise_tests.BaseTest;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static automation_exercise_pom.helpers.DataRandomizer.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+
 public class PlaceOrderTest extends BaseTest {
+    CreateUserAccount createUserAccount;
+    ProductsPage productsPage;
+    CheckoutPage checkoutPage;
+    CartPage cartPage;
+    PaymentPage paymentPage;
+    StatusPage statusPage;
 
     @Test
     public void placeOrderTest(){
+        createUserAccount =  new CreateUserAccount();
+        productsPage =  new ProductsPage();
+        checkoutPage =  new CheckoutPage();
+        cartPage =  new CartPage();
+        paymentPage =  new PaymentPage();
+        statusPage =  new StatusPage();
+
         UserRegistrationData user = UserFactory.getUserForRegistration();
 
-        mainPage
-                .assertMainPageSuccessfullyLoaded()
-                .openLoginPage()
-                .signUpUser(UserFactory.userName);
+        mainMenu
+                .clickLoginPageButton()
+                .inputName(UserFactory.userName)
+                .inputRegistrationEmail(getRandomEmail())
+                .clickSignupButton();
 
         createUserAccount
                 .userRegisterWithDetails(user)
-                .clickContinueButton()
-                .assertUserNameIsVisible(UserFactory.userName)
-                .openProductsPage();
+                .clickContinueButton();
+
+        assertThat(mainMenu.isUserNameIsVisible(UserFactory.userName))
+                .as("Username: " + UserFactory.userName + " is visible")
+                .isTrue();
+
+        mainMenu
+                .clickProductPageButton();
 
         List<Product> allProducts = productsPage
                 .getAllProducts();
 
-        allProducts
-                .getFirst()
-                .clickAddToCartButton()
+        Product product = allProducts.getFirst();
+
+        productsPage
+                .clickAddToCartButton(product)
                 .clickViewCartButton()
                 .clickCheckoutButton();
 
         CheckoutData actualCheckoutData = checkoutPage.getDeliveryAddress();
         CheckoutData expectedCheckoutData = checkoutPage.getExpectedCheckoutData(user);
 
-        checkoutPage.assertDeliveryAddressToBeEqual(actualCheckoutData, expectedCheckoutData);
+        assertThat(checkoutPage.isDeliveryAddressToBeEqual(actualCheckoutData, expectedCheckoutData))
+                .as("Checkout data are not equal")
+                .isTrue();
 
         List<ProductInCart> allProductsInCart = checkoutPage
-                .assertProductInCartToBe(1)
                 .getAllProductsInCart();
+
+        assertThat(allProductsInCart.size())
+                .as("ERROR: The number of products in cart is not equal to expected")
+                .isEqualTo(1);
 
         ProductInCart actualProductInCart = cartPage.filterProducts(allProductsInCart, "Blue Top");
         ProductInCart expectedProductInCart = ExpectedProductBuilder.getExpectedProduct("blueTop", 1);
 
-        cartPage.assertProductsToBeEqual(actualProductInCart, expectedProductInCart);
+        assertThat(cartPage.isProductsToBeEqual(actualProductInCart, expectedProductInCart))
+                .as("ERROR: Products are not equal")
+                .isTrue();
 
         checkoutPage
                 .clickPaymentButton()
-                .assertPaymentPageLoaded()
-                .inputCardData()
-                .clickSubmitOrderButton()
-                .assertSuccessfullyOrderMessageIsVisible()
+                .inputCardName(getRandomCardName())
+                .inputCardNumber(getRandomCardNumber())
+                .inputCardCVC(getRandomCVC())
+                .inputCardExpirationMonth(getRandomExpirationMonth())
+                .inputCardExpirationYear(getRandomExpirationYear())
+                .clickSubmitOrderButton();
+
+        assertThat(paymentPage.isSuccessfullyOrderMessageIsVisible())
+                .as("Error: Successfully order message is not visible")
+                .isTrue();
+
+        statusPage
                 .clickContinueButton();
 
-        deletedAccountPage
-                .deleteAccount();
+        mainMenu
+                .clickDeleteAccountButton();
+
+        assertThat(statusPage.isDeleteSuccessfullyMassageIsVisible())
+                .as("ERROR: Delete successfully massage is not visible")
+                .isTrue();
     }
 }

@@ -2,7 +2,7 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %highlight{%-5level}{INFO=green} %c:%M:%L - %style{%msg}{cyan}%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%highlight{%-5level}{INFO=green, ERROR=red}] %c:%M:%L - %highlight{%msg}{INFO=cyan, ERROR=red}%n"/>
         </Console>
 
         <Async name="AsyncConsole">

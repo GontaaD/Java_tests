@@ -2,6 +2,7 @@ package automation_exercise_pom.pages;
 
 import automation_exercise_pom.models.ProductInCart;
 import automation_exercise_pom.pages.interfaces.IProductInCart;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
+import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBeMoreThan;
 
 public class CartPage extends BasePage implements IProductInCart {
     private final By productInCartContainerLocator = By.xpath("//tr[contains(@id, 'product-')]");
@@ -22,38 +23,37 @@ public class CartPage extends BasePage implements IProductInCart {
     @Step("Click delete from cart button")
     public CartPage clickDeleteFromCartButton(){
         logger.info("Click [delete product from cart] button");
-        waiter.waitUntilVisibilityOfElementLocated(productDeleteFromCartButtonLocator).click();
+        waitUntilVisibilityOfElementLocated(productDeleteFromCartButtonLocator).click();
         return this;
     }
 
     @Step("Click checkout button")
     public CheckoutPage clickCheckoutButton(){
         logger.info("Click [checkout] button");
-        waiter.waitUntilElementClickable(proceedToCheckoutButton).click();
-        return  new CheckoutPage();
+        waitUntilElementClickable(proceedToCheckoutButton).click();
+        return new CheckoutPage();
     }
 
-    @Step("Assert cart is empty")
-    public CartPage assertCartIsEmpty(){
-        waiter.waitUntilVisibilityOfElementLocated(cartIsEmptyMessageLocator, Duration.ofSeconds(2));
-        logger.info("Assert: cart is empty [PASSED]");
-        return this;
+    @Step("Is cart is empty?")
+    public boolean isCartIsEmpty(){
+        logger.info("Is cart is empty?");
+        return waitUntilVisibilityOfElementLocated(cartIsEmptyMessageLocator, Duration.ofSeconds(2));
     }
 
-    @Step("Assert product in cart to be")
-    public CartPage assertProductInCartToBe(int count){
-        new WebDriverWait(getDriver(), Duration.ofSeconds(2))
-                .until(d -> !d.findElements(productInCartContainerLocator).isEmpty());
-        List<WebElement> elements = getDriver().findElements(productInCartContainerLocator);
-        assertEquals(elements.size(), count, "Number of products in cart does not match expected");
-        logger.info("Assert: product in cart to be: {} [PASSED]", count);
-        return this;
+    @Step("Get products count in cart")
+    public int getProductCountInCart() {
+        List<WebElement> elements = new WebDriverWait(getDriver(), Duration.ofSeconds(5))
+                .until(numberOfElementsToBeMoreThan(productInCartContainerLocator, -1));
+        logger.info("Get products count in cart. Count: " + elements.size());
+        return elements.size();
     }
 
-    @Step("Assert products to be equal")
-    public CartPage assertProductsToBeEqual(ProductInCart actual, ProductInCart expected){
+    @Step("Is products to be equal?")
+    public boolean isProductsToBeEqual(ProductInCart actual, ProductInCart expected){
+        Allure.addAttachment("Actual list", actual.toString());
+        Allure.addAttachment("Expected list", expected.toString());
         logger.info(String.format("""
-                        Assert: products to be equal
+                        Is products to be equal
                          %-8s : actual: [%-10s] | expected: [%-10s]
                          %-8s : actual: [%-10s] | expected: [%-10s]
                          %-8s : actual: [%-10s] | expected: [%-10s]
@@ -63,10 +63,13 @@ public class CartPage extends BasePage implements IProductInCart {
                 "Price", actual.getPrice(), expected.getPrice(),
                 "Quantity", actual.getQuantity(), expected.getQuantity(),
                 "Total", actual.getTotalPrice(), expected.getTotalPrice()));
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .isEqualTo(expected);
-        logger.info("Assert result: [PASSED]");
-        return this;
+        try {
+            assertThat(actual)
+                    .usingRecursiveComparison()
+                    .isEqualTo(expected);
+            return true;
+        } catch (AssertionError e) {
+            return false;
+        }
     }
 }

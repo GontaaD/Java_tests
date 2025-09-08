@@ -2,29 +2,34 @@ package automation_exercise_tests.products;
 
 import automation_exercise_pom.models.Product;
 import automation_exercise_pom.models.ProductDetails;
+import automation_exercise_pom.pages.ProductDetailsPage;
+import automation_exercise_pom.pages.ProductsPage;
 import automation_exercise_tests.BaseTest;
-import io.qameta.allure.Step;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ProductsDetailsTest extends BaseTest {
+    ProductsPage productsPage;
+    ProductDetailsPage productDetailsPage;
 
     @Test
-    @Step("Check product details test start")
     public void checkProductDetailsTest(){
+        productsPage =  new ProductsPage();
+        productDetailsPage =  new ProductDetailsPage();
 
-        mainPage
-                .assertMainPageSuccessfullyLoaded()
-                .openProductsPage();
+        mainMenu
+                .clickProductPageButton();
 
         List<Product> allProducts = productsPage
-                .assertProductsCountToBe(34)
                 .getAllProducts();
 
-        allProducts
-                .getFirst()
-                .clickViewProductButton();
+        Product product = allProducts.getFirst();
+
+        productsPage
+                .clickViewProductButton(product);
 
         ProductDetails actualProductDetails = productDetailsPage
                 .getProductDetails();
@@ -38,6 +43,8 @@ public class ProductsDetailsTest extends BaseTest {
                 .brand("Brand:Polo")
                 .build();
 
-        productDetailsPage.assertProductDetailsToBeEquals(actualProductDetails,  expectedProductDetails);
+        assertThat(productDetailsPage.isProductDetailsToBeEquals(actualProductDetails,  expectedProductDetails))
+                .as("ERROR: Product details are not equals")
+                .isTrue();
     }
 }

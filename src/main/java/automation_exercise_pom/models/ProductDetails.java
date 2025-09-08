@@ -16,8 +16,4 @@ public class ProductDetails {
     private String availability;
     private String condition;
     private String brand;
-
-
-
-
 }
