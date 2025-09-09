@@ -6,24 +6,24 @@
     </listeners>
     <test name="Cart">
         <classes>
-            <class name="automation_exercise_tests.tests.cart.AddToCartProductTest"/>
-            <class name="automation_exercise_tests.tests.cart.DeleteProductFromCartTest"/>
-            <class name="automation_exercise_tests.tests.cart.ProductQuantityInCurtTest"/>
+            <class name="automation_exercise.tests.cart.AddToCartProductTest"/>
+            <class name="automation_exercise.tests.cart.DeleteProductFromCartTest"/>
+            <class name="automation_exercise.tests.cart.ProductQuantityInCurtTest"/>
         </classes>
     </test>
 
     <test name="Login / Register">
         <classes>
-            <class name="automation_exercise_tests.tests.login.LoginLogoutTest"/>
-            <class name="automation_exercise_tests.tests.login.RegistrationTest"/>
+            <class name="automation_exercise.tests.login.LoginLogoutTest"/>
+            <class name="automation_exercise.tests.login.RegistrationTest"/>
         </classes>
     </test>
 
     <test name="Products">
         <classes>
-            <class name="automation_exercise_tests.tests.products.PlaceOrderTest"/>
-            <class name="automation_exercise_tests.tests.products.ProductsDetailsTest"/>
-            <class name="automation_exercise_tests.tests.products.SearchProductTest"/>
+            <class name="automation_exercise.tests.products.PlaceOrderTest"/>
+            <class name="automation_exercise.tests.products.ProductsDetailsTest"/>
+            <class name="automation_exercise.tests.products.SearchProductTest"/>
         </classes>
     </test>
 </suite>
