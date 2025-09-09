@@ -1,14 +1,14 @@
 package automation_exercise_pom.pages;
 
-import automation_exercise_pom.helpers.AdsHelper;
-import automation_exercise_pom.helpers.MainMenu;
+import automation_exercise_pom.components.MainMenu;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import java.time.Duration;
 
+import static automation_exercise_pom.utils.AdsHelper.removeAds;
+
 public class LoginPage extends BasePage {
-    AdsHelper adsHelper  = new AdsHelper();
     private final By loginTitleLocator = By.xpath("//h2[text()='New User Signup!']");
     private final By nameInputLocator = By.xpath("//input[@data-qa='signup-name']");
     private final By emailRegistrationInputLocator = By.xpath("//input[@data-qa='signup-email']");
@@ -35,7 +35,7 @@ public class LoginPage extends BasePage {
     public CreateAccountPage clickSignupButton(){
         logger.info("Click [signup button] button");
         waitUntilVisibilityOfElementLocated(signupButtonLocator).click();
-        adsHelper.removeAds();
+        removeAds();
         return new CreateAccountPage();
     }
 
@@ -57,7 +57,7 @@ public class LoginPage extends BasePage {
     public MainMenu clickLoginButton(){
         logger.info("Click [login] button");
         waitUntilElementClickable(loginButtonLocator).click();
-        adsHelper.removeAds();
+        removeAds();
         return new MainMenu();
     }
 

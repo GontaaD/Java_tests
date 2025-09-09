@@ -1,18 +1,17 @@
 package automation_exercise_pom.pages;
 
-import automation_exercise_pom.helpers.AdsHelper;
 import automation_exercise_pom.models.CheckoutData;
 import automation_exercise_pom.models.UserRegistrationData;
-import automation_exercise_pom.pages.interfaces.IProductInCart;
+import automation_exercise_pom.interfaces.IProductInCart;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static automation_exercise_pom.utils.AdsHelper.removeAds;
 
 public class CheckoutPage extends BasePage implements IProductInCart {
-    AdsHelper adsHelper = new AdsHelper();
     private final By deliveryAddressContainerLocator = By.xpath("//ul[@id='address_delivery']");
     private final By deliveryNameLocator = By.xpath(".//li[contains(@class, 'address_firstname')]");
     private final By deliveryCompanyLocator = By.xpath(".//li[contains(@class, 'address_address1')][1]");
@@ -52,7 +51,7 @@ public class CheckoutPage extends BasePage implements IProductInCart {
 
     @Step("Click payment button")
     public PaymentPage clickPaymentButton(){
-        adsHelper.removeAds();
+        removeAds();
         logger.info("Clicking [payment] button");
         waitUntilVisibilityOfElementLocated(paymentButtonLocator).click();
         return new PaymentPage();

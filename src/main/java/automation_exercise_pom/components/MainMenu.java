@@ -1,14 +1,15 @@
-package automation_exercise_pom.helpers;
+package automation_exercise_pom.components;
 
 import automation_exercise_pom.pages.*;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
+import static automation_exercise_pom.utils.AdsHelper.removeAds;
+
 public class MainMenu extends BasePage {
-    AdsHelper adsHelper = new AdsHelper();
     private final By loginButtonLocator = By.xpath("//a[@href='/login']");
     private final By logoutButtonLocator = By.xpath("//a[@href='/logout']");
-    private final By loginedUserNameLocator = By.xpath("//b");
+    private final By loginedUsernameLocator = By.xpath("//b");
     private final By deleteAccountButtonLocator = By.xpath("//a[@href='/delete_account']");
     private final By productPageButtonLocator = By.xpath("//a[@href='/products']");
 
@@ -16,7 +17,7 @@ public class MainMenu extends BasePage {
     public StatusPage clickDeleteAccountButton(){
         logger.info("Clicking [delete account] button");
         waitUntilElementClickable(deleteAccountButtonLocator).click();
-        adsHelper.removeAds();
+        removeAds();
         return new StatusPage();
     }
 
@@ -24,15 +25,15 @@ public class MainMenu extends BasePage {
     public LoginPage clickLoginPageButton() {
         logger.info("Click [login page] button");
         waitUntilElementClickable(loginButtonLocator).click();
-        adsHelper.removeAds();
+        removeAds();
         return new LoginPage();
     }
 
-    @Step("Click logout page button")
-    public LoginPage clickLogoutPageButton() {
+    @Step("Click logout button")
+    public LoginPage clickLogoutButton() {
         logger.info("Click [logout] button");
         waitUntilElementClickable(logoutButtonLocator).click();
-        adsHelper.removeAds();
+        removeAds();
         return new LoginPage();
     }
 
@@ -40,14 +41,14 @@ public class MainMenu extends BasePage {
     public ProductsPage clickProductPageButton() {
         logger.info( "Click [product page] button");
         waitUntilElementClickable(productPageButtonLocator).click();
-        adsHelper.removeAds();
+        removeAds();
         return new ProductsPage();
     }
 
-    @Step("Is user name is visible")
-    public boolean isUserNameIsVisible(String text){
-        logger.info("Is user name: [" + text + "] visible?");
-        return waitUntilTextToBeInElement(loginedUserNameLocator, text);
+    @Step("Is username visible")
+    public boolean isUsernameVisible(String text){
+        logger.info("Is username: [" + text + "] visible?");
+        return waitUntilTextToBeInElement(loginedUsernameLocator, text);
     }
 }
 

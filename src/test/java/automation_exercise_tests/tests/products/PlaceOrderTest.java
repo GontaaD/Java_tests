@@ -1,6 +1,5 @@
-package automation_exercise_tests.products;
+package automation_exercise_tests.tests.products;
 
-import automation_exercise_pom.helpers.CreateUserAccount;
 import automation_exercise_pom.helpers.ExpectedProductBuilder;
 import automation_exercise_pom.helpers.UserFactory;
 import automation_exercise_pom.models.CheckoutData;
@@ -8,7 +7,7 @@ import automation_exercise_pom.models.Product;
 import automation_exercise_pom.models.ProductInCart;
 import automation_exercise_pom.models.UserRegistrationData;
 import automation_exercise_pom.pages.*;
-import automation_exercise_tests.BaseTest;
+import automation_exercise_tests.base.BaseTest;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class PlaceOrderTest extends BaseTest {
-    CreateUserAccount createUserAccount;
+    CreateAccountPage createAccountPage;
     ProductsPage productsPage;
     CheckoutPage checkoutPage;
     CartPage cartPage;
@@ -27,7 +26,7 @@ public class PlaceOrderTest extends BaseTest {
 
     @Test
     public void placeOrderTest(){
-        createUserAccount =  new CreateUserAccount();
+        createAccountPage = new CreateAccountPage();
         productsPage =  new ProductsPage();
         checkoutPage =  new CheckoutPage();
         cartPage =  new CartPage();
@@ -42,11 +41,11 @@ public class PlaceOrderTest extends BaseTest {
                 .inputRegistrationEmail(getRandomEmail())
                 .clickSignupButton();
 
-        createUserAccount
+        createAccountPage
                 .userRegisterWithDetails(user)
                 .clickContinueButton();
 
-        assertThat(mainMenu.isUserNameIsVisible(UserFactory.userName))
+        assertThat(mainMenu.isUsernameVisible(UserFactory.userName))
                 .as("Username: " + UserFactory.userName + " is visible")
                 .isTrue();
 

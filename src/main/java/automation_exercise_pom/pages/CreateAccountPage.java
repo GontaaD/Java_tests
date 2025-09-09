@@ -1,8 +1,11 @@
 package automation_exercise_pom.pages;
 
+import automation_exercise_pom.models.UserRegistrationData;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
+
+import static automation_exercise_pom.utils.AdsHelper.removeAds;
 
 public class CreateAccountPage extends BasePage {
     private final By mrRadioButtonLocator = By.xpath("//div[@id='uniform-id_gender1']");
@@ -153,5 +156,29 @@ public class CreateAccountPage extends BasePage {
         logger.info("Click [Create Account] button");
         waitUntilElementClickable(createAccountButtonLocator).click();
         return new StatusPage();
+    }
+
+    @Step("userRegisterWithDetails")
+    public StatusPage userRegisterWithDetails(UserRegistrationData user) {
+        removeAds();
+        return this
+                .clickGenderRadioButton(user.getTitle())
+                .passwordInput(user.getPassword())
+                .selectDays(user.getDay())
+                .selectMonths(user.getMonth())
+                .selectYears(user.getYear())
+                .clickNewsletter()
+                .clickOptin()
+                .firstNameInput(user.getFirstName())
+                .lastNameInput(user.getLastName())
+                .companyInput(user.getCompany())
+                .address1Input(user.getAddress1())
+                .address2Input(user.getAddress2())
+                .selectCountry(user.getCountry())
+                .stateInput(user.getState())
+                .cityInput(user.getCity())
+                .zipcodeInput(user.getZipcode())
+                .mobileNumberInput(user.getMobile())
+                .clickCreateAccountButton();
     }
 }

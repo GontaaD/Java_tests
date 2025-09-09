@@ -1,4 +1,4 @@
-package automation_exercise_pom.pages.interfaces;
+package automation_exercise_pom.interfaces;
 
 import automation_exercise_pom.models.ProductInCart;
 import automation_exercise_pom.pages.BasePage;

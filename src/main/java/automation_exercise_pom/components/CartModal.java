@@ -1,9 +1,11 @@
-package automation_exercise_pom.pages;
+package automation_exercise_pom.components;
 
+import automation_exercise_pom.pages.BasePage;
+import automation_exercise_pom.pages.CartPage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
-public class CartModal extends BasePage{
+public class CartModal extends BasePage {
     private final By closeModalButtonLocator = By.xpath("//button[contains(@class, 'close-modal')]");
     private final By viewCartButtonLocator = By.xpath("//div[@id='cartModal']//a[@href='/view_cart']");
 

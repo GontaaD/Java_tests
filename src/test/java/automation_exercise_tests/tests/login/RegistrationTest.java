@@ -1,22 +1,22 @@
-package automation_exercise_tests.login_and_register;
+package automation_exercise_tests.tests.login;
 
-import automation_exercise_pom.helpers.CreateUserAccount;
 import automation_exercise_pom.helpers.UserFactory;
 import automation_exercise_pom.models.UserRegistrationData;
+import automation_exercise_pom.pages.CreateAccountPage;
 import automation_exercise_pom.pages.StatusPage;
-import automation_exercise_tests.BaseTest;
+import automation_exercise_tests.base.BaseTest;
 import org.testng.annotations.Test;
 
 import static automation_exercise_pom.helpers.DataRandomizer.getRandomEmail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BaseTest {
-    CreateUserAccount createUserAccount;
     StatusPage statusPage;
+    CreateAccountPage createAccountPage;
 
     @Test
     public void registration_test() {
-        createUserAccount =  new CreateUserAccount();
+        createAccountPage = new CreateAccountPage();
         statusPage = new StatusPage();
 
         UserRegistrationData user = UserFactory.getUserForRegistration();
@@ -27,7 +27,7 @@ public class RegistrationTest extends BaseTest {
                 .inputRegistrationEmail(getRandomEmail())
                 .clickSignupButton();
 
-        createUserAccount
+        createAccountPage
                 .userRegisterWithDetails(user);
 
         assertThat(statusPage.isSuccessfullyCreatedAccount())
@@ -37,7 +37,7 @@ public class RegistrationTest extends BaseTest {
         statusPage
                 .clickContinueButton();
 
-        assertThat(mainMenu.isUserNameIsVisible(UserFactory.userName))
+        assertThat(mainMenu.isUsernameVisible(UserFactory.userName))
                 .as("ERROR: Username: " + UserFactory.userName + " is not visible")
                 .isTrue();
 

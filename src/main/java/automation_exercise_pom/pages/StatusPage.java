@@ -1,13 +1,12 @@
 package automation_exercise_pom.pages;
 
-import automation_exercise_pom.helpers.AdsHelper;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import java.time.Duration;
+import static automation_exercise_pom.utils.AdsHelper.removeAds;
 
 public class StatusPage extends BasePage{
-    AdsHelper adsHelper = new AdsHelper();
     private final By createdAccountSuccessfullyMassage = By.xpath("//b[text()='Account Created!']");
     private final By continueButton = By.xpath("//a[@data-qa='continue-button']");
     private final By deleteSuccessfullyMassage = By.xpath("//b[text()='Account Deleted!']");
@@ -16,7 +15,7 @@ public class StatusPage extends BasePage{
     public void clickContinueButton() {
         logger.info("Click [continue] button");
         waitUntilElementClickable(continueButton).click();
-        adsHelper.removeAds();
+        removeAds();
     }
 
     @Step("Is successfully created account?")

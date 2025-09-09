@@ -1,7 +1,7 @@
 package automation_exercise_pom.pages;
 
 import automation_exercise_pom.models.ProductInCart;
-import automation_exercise_pom.pages.interfaces.IProductInCart;
+import automation_exercise_pom.interfaces.IProductInCart;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;

@@ -16,4 +16,19 @@ public class ProductDetails {
     private String availability;
     private String condition;
     private String brand;
+
+    @Override
+    public String toString() {
+        return String.format(
+                """
+                        name        : [%-25s]
+                        category    : [%-25s]
+                        price       : [%-25s]
+                        availability: [%-25s]
+                        condition   : [%-25s]
+                        brand       : [%-25s]
+                        """,
+                name, category, price, availability, condition, brand
+        );
+    }
 }

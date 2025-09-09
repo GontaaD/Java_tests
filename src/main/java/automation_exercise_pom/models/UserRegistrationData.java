@@ -23,4 +23,5 @@ public class UserRegistrationData {
     private String city;
     private String zipcode;
     private String mobile;
+
 }

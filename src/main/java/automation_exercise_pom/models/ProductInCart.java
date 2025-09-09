@@ -15,4 +15,17 @@ public class ProductInCart {
     private String price;
     private String quantity;
     private String totalPrice;
+
+    @Override
+    public String toString() {
+        return String.format(
+                """
+                        name      : [%-10s]
+                        price     : [%-10s]
+                        quantity  : [%-10s]
+                        totalPrice: [%-10s]
+                        """,
+                name, price, quantity, totalPrice
+        );
+    }
 }

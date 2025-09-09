@@ -1,6 +1,5 @@
 package automation_exercise_pom.pages;
 
-import lombok.Getter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -30,13 +29,25 @@ public abstract class BasePage {
     }
 
     public WebElement waitUntilVisibilityOfElementLocated(By locator) {
-        return new WebDriverWait(getDriver(), defaultWaitTimeout)
-                .until(ExpectedConditions.visibilityOfElementLocated(locator));
+        try {
+            return new WebDriverWait(getDriver(), defaultWaitTimeout)
+                    .until(ExpectedConditions.visibilityOfElementLocated(locator));
+        } catch (TimeoutException e) {
+            String message = "Waiting for element located [" + locator + "] timed out";
+            logger.error(message, e);
+            throw new TimeoutException(message, e);
+        }
     }
 
     public WebElement waitUntilElementClickable(By locator) {
-        return new WebDriverWait(getDriver(), defaultWaitTimeout)
-                .until(ExpectedConditions.elementToBeClickable(locator));
+        try{
+            return new WebDriverWait(getDriver(), defaultWaitTimeout)
+                    .until(ExpectedConditions.elementToBeClickable(locator));
+        } catch (TimeoutException e) {
+            String message = "Waiting for element clickable [" + locator + "] timed out";
+            logger.error(message, e);
+            throw new TimeoutException(message, e);
+        }
     }
 
     public boolean waitUntilVisibilityOfElementLocated(By locator, Duration duration) {
@@ -49,7 +60,7 @@ public abstract class BasePage {
         }
     }
 
-    public Boolean waitUntilTextToBeInElement(By locator,  String text) {
+    public boolean waitUntilTextToBeInElement(By locator,  String text) {
         try {
             new WebDriverWait(getDriver(), defaultWaitTimeout)
                     .until(ExpectedConditions.textToBePresentInElementLocated(locator, text));

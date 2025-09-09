@@ -1,6 +1,8 @@
 package automation_exercise_pom.pages;
 
+import automation_exercise_pom.components.CartModal;
 import automation_exercise_pom.models.ProductDetails;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -58,6 +60,8 @@ public class ProductDetailsPage extends BasePage{
 
     @Step("Is product details to be equals?")
     public boolean isProductDetailsToBeEquals(ProductDetails actual, ProductDetails expected) {
+        Allure.addAttachment("Actual list", actual.toString());
+        Allure.addAttachment("Expected list", expected.toString());
         logger.info(String.format("""
                         Is products to be equal
                          %-13s : actual: [%-25s] | expected: [%-25s]

@@ -18,4 +18,19 @@ public class CheckoutData {
     private String country;
     private String phone;
 
+    @Override
+    public String toString() {
+        return String.format(
+                """
+                        name    : [%-50s]
+                        company : [%-50s]
+                        address1: [%-50s]
+                        address2: [%-50s]
+                        city    : [%-50s]
+                        country : [%-50s]
+                        phone   : [%-50s]
+                        """,
+                name, company, address1, address2, city, country, phone
+        );
+    }
 }

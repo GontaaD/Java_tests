@@ -1,4 +1,4 @@
-package automation_exercise_tests;
+package automation_exercise_tests.listeners;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,5 +16,10 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         logger.error("=== FAILED TEST: {} ===", result.getName(), result.getThrowable());
+    }
+
+    @Override
+    public void onTestStart(ITestResult result) {
+        logger.info("=== STARTED TEST: {} ===", result.getName());
     }
 }

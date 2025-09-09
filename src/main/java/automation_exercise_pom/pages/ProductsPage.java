@@ -1,7 +1,8 @@
 package automation_exercise_pom.pages;
 
-import automation_exercise_pom.helpers.AdsHelper;
+import automation_exercise_pom.components.CartModal;
 import automation_exercise_pom.models.Product;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static automation_exercise_pom.utils.AdsHelper.removeAds;
 
 public class ProductsPage extends BasePage{
-    AdsHelper adsHelper = new AdsHelper();
     private final By searchProductInputLocator = By.xpath("//input[@id='search_product']");
     private final By submitSearchButtonLocator = By.xpath("//button[@id='submit_search']");
     private final By productContainerLocator = By.xpath("//div[@class='product-image-wrapper']");
@@ -84,20 +85,22 @@ public class ProductsPage extends BasePage{
     public ProductDetailsPage clickViewProductButton(Product product){
         logger.info("Click [view product] button");
         product.getViewProductButton().click();
-        adsHelper.removeAds();
+        removeAds();
         return new ProductDetailsPage();
     }
 
     @Step("Click add to cart button")
     public CartModal clickAddToCartButton(Product product){
         logger.info("Click [add to cart] button");
-        adsHelper.removeAds();
+        removeAds();
         product.getAddToCartButton().click();
         return new CartModal();
     }
 
     @Step("Is product details to be equal?")
-    public boolean isProductDetailsToBeEqual(Product actualProduct, Product expectedProduct){
+    public boolean isProductDetailsToBeEqual(Product actual, Product expected){
+        Allure.addAttachment("Actual list", actual.toString());
+        Allure.addAttachment("Expected list", expected.toString());
         logger.info(String.format(
                 """
                         Is product details to be equal
@@ -107,18 +110,18 @@ public class ProductsPage extends BasePage{
                          %-12s : actual: [%-35s] | expected: [%-35s]
                          %-12s : actual: [%-35s] | expected: [%-35s]
                         """,
-                "Image", actualProduct.getImage() == null ? "[Null]" : "[Not Null]",
-                "Add to cart", actualProduct.getAddToCartButton() == null ? "[Null]" : "[Not Null]",
-                "View product", actualProduct.getImage() == null ? "[Null]" : "[Not Null]",
-                "Price", actualProduct.getPrice(), expectedProduct.getPrice(),
-                "Name", actualProduct.getName(), expectedProduct.getName()
+                "Image", actual.getImage() == null ? "[Null]" : "[Not Null]",
+                "Add to cart", actual.getAddToCartButton() == null ? "[Null]" : "[Not Null]",
+                "View product", actual.getImage() == null ? "[Null]" : "[Not Null]",
+                "Price", actual.getPrice(), expected.getPrice(),
+                "Name", actual.getName(), expected.getName()
         ));
         try {
-            assertThat(actualProduct.getImage()).isNotNull();
-            assertThat(actualProduct.getAddToCartButton()).isNotNull();
-            assertThat(actualProduct.getViewProductButton()).isNotNull();
-            assertThat(actualProduct.getPrice()).isEqualTo(expectedProduct.getPrice());
-            assertThat(actualProduct.getName()).isEqualTo(expectedProduct.getName());
+            assertThat(actual.getImage()).isNotNull();
+            assertThat(actual.getAddToCartButton()).isNotNull();
+            assertThat(actual.getViewProductButton()).isNotNull();
+            assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
+            assertThat(actual.getName()).isEqualTo(expected.getName());
             return true;
         }  catch (AssertionError e) {
             return false;

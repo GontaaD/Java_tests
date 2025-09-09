@@ -1,4 +1,4 @@
-package automation_exercise_pom;
+package automation_exercise_pom.utils;
 
 import io.github.cdimascio.dotenv.Dotenv;
 

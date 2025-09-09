@@ -1,15 +1,10 @@
 package automation_exercise_pom.models;
 
-import automation_exercise_pom.pages.CartModal;
-import automation_exercise_pom.pages.ProductDetailsPage;
-import io.qameta.allure.Step;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @AllArgsConstructor
 @Getter
@@ -21,4 +16,22 @@ public class Product {
     private String name;
     private WebElement addToCartButton;
     private WebElement viewProductButton;
+
+    @Override
+    public String toString() {
+        return String.format(
+                """
+                        image            : [%-8s]
+                        addToCartButton  : [%-8s]
+                        viewProductButton: [%-8s]
+                        price            : [%-35s]
+                        name             : [%-35s]
+                        """,
+                getImage() == null ? "Null" : "Not Null",
+                getAddToCartButton() == null ? "Null" : "Not Null",
+                getViewProductButton() == null ? "Null" : "Not Null",
+                price,
+                name
+        );
+    }
 }

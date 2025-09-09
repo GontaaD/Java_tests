@@ -1,9 +1,9 @@
-package automation_exercise_tests.login_and_register;
+package automation_exercise_tests.tests.login;
 
-import automation_exercise_pom.SecretsManager;
+import automation_exercise_pom.utils.SecretsManager;
 
 import automation_exercise_pom.pages.LoginPage;
-import automation_exercise_tests.BaseTest;
+import automation_exercise_tests.base.BaseTest;
 import io.qameta.allure.Step;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,8 +25,8 @@ public class LoginLogoutTest extends BaseTest {
 
     @Test
     public void loginTest(){
-        assertThat(mainMenu.isUserNameIsVisible("test"))
-                .as("ERROR login: Username: test, is not visible")
+        assertThat(mainMenu.isUsernameVisible("test"))
+                .as("ERROR: Username: test, is not visible")
                 .isTrue();
     }
 
@@ -35,10 +35,10 @@ public class LoginLogoutTest extends BaseTest {
         loginPage = new LoginPage();
 
         mainMenu
-                .clickLogoutPageButton();
+                .clickLogoutButton();
 
         assertThat(loginPage.isLoginPageSuccessfullyLoaded())
-                .as("ERROR logout: Logout page is displayed")
+                .as("ERROR: Login page is displayed")
                 .isTrue();
     }
 }

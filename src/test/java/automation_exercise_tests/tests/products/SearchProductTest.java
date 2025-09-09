@@ -1,8 +1,8 @@
-package automation_exercise_tests.products;
+package automation_exercise_tests.tests.products;
 
 import automation_exercise_pom.models.Product;
 import automation_exercise_pom.pages.ProductsPage;
-import automation_exercise_tests.BaseTest;
+import automation_exercise_tests.base.BaseTest;
 import org.testng.annotations.Test;
 
 import java.util.List;
