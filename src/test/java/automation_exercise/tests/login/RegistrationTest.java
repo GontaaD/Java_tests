@@ -1,13 +1,11 @@
 package automation_exercise.tests.login;
 
-import automation_exercise.helpers.UserFactory;
 import automation_exercise.models.UserRegistrationData;
 import automation_exercise.pages.CreateAccountPage;
 import automation_exercise.pages.StatusPage;
 import automation_exercise.base.BaseTest;
 import org.testng.annotations.Test;
 
-import static automation_exercise.helpers.DataRandomizer.getRandomEmail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BaseTest {
@@ -19,12 +17,12 @@ public class RegistrationTest extends BaseTest {
         createAccountPage = new CreateAccountPage();
         statusPage = new StatusPage();
 
-        UserRegistrationData user = UserFactory.getUserForRegistration();
+        UserRegistrationData user = new UserRegistrationData();
 
         mainMenu
                 .clickLoginPageButton()
-                .inputName(UserFactory.userName)
-                .inputRegistrationEmail(getRandomEmail())
+                .inputName(user.getUsername())
+                .inputRegistrationEmail(user.getEmail())
                 .clickSignupButton();
 
         createAccountPage
@@ -37,8 +35,8 @@ public class RegistrationTest extends BaseTest {
         statusPage
                 .clickContinueButton();
 
-        assertThat(mainMenu.isUsernameVisible(UserFactory.userName))
-                .as("ERROR: Username: " + UserFactory.userName + " is not visible")
+        assertThat(mainMenu.isUsernameVisible(user.getUsername()))
+                .as("ERROR: Username: " + user.getUsername() + " is not visible")
                 .isTrue();
 
         mainMenu

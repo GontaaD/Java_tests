@@ -1,22 +1,25 @@
 package automation_exercise.tests.products;
 
 import automation_exercise.helpers.ExpectedProductBuilder;
-import automation_exercise.helpers.UserFactory;
 import automation_exercise.models.CheckoutData;
 import automation_exercise.models.Product;
 import automation_exercise.models.ProductInCart;
 import automation_exercise.models.UserRegistrationData;
 import automation_exercise.pages.*;
 import automation_exercise.base.BaseTest;
+
+import com.github.javafaker.Faker;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-import static automation_exercise.helpers.DataRandomizer.*;
+import static automation_exercise.models.UserRegistrationData.getRandomEmail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class PlaceOrderTest extends BaseTest {
+    Faker faker = new Faker();
     CreateAccountPage createAccountPage;
     ProductsPage productsPage;
     CheckoutPage checkoutPage;
@@ -32,12 +35,11 @@ public class PlaceOrderTest extends BaseTest {
         cartPage =  new CartPage();
         paymentPage =  new PaymentPage();
         statusPage =  new StatusPage();
-
-        UserRegistrationData user = UserFactory.getUserForRegistration();
+        UserRegistrationData user = new UserRegistrationData();
 
         mainMenu
                 .clickLoginPageButton()
-                .inputName(UserFactory.userName)
+                .inputName(user.getUsername())
                 .inputRegistrationEmail(getRandomEmail())
                 .clickSignupButton();
 
@@ -45,8 +47,8 @@ public class PlaceOrderTest extends BaseTest {
                 .userRegisterWithDetails(user)
                 .clickContinueButton();
 
-        assertThat(mainMenu.isUsernameVisible(UserFactory.userName))
-                .as("Username: " + UserFactory.userName + " is visible")
+        assertThat(mainMenu.isUsernameVisible(user.getUsername()))
+                .as("Username: " + user.getUsername() + " is visible")
                 .isTrue();
 
         mainMenu
@@ -85,11 +87,12 @@ public class PlaceOrderTest extends BaseTest {
 
         checkoutPage
                 .clickPaymentButton()
-                .inputCardName(getRandomCardName())
-                .inputCardNumber(getRandomCardNumber())
-                .inputCardCVC(getRandomCVC())
-                .inputCardExpirationMonth(getRandomExpirationMonth())
-                .inputCardExpirationYear(getRandomExpirationYear())
+                .inputCardName(faker.finance().creditCard())
+                .inputCardNumber(faker.business().creditCardNumber())
+                .inputCardCVC(String.valueOf(ThreadLocalRandom.current().nextInt(100, 1000)))
+                .inputCardExpirationMonth(String.format("%02d", ThreadLocalRandom.current().nextInt(1, 13)))
+                .inputCardExpirationYear(String.valueOf(ThreadLocalRandom.current()
+                        .nextInt(java.time.Year.now().getValue() + 1, java.time.Year.now().getValue() + 6)))
                 .clickSubmitOrderButton();
 
         assertThat(paymentPage.isSuccessfullyOrderMessageIsVisible())

@@ -1,37 +1,54 @@
 package automation_exercise.helpers;
 
 import automation_exercise.models.UserRegistrationData;
+import com.github.javafaker.Faker;
 
-import static automation_exercise.helpers.DataRandomizer.*;
-import static automation_exercise.helpers.DataRandomizer.getRandomAddress1;
-import static automation_exercise.helpers.DataRandomizer.getRandomAddress2;
-import static automation_exercise.helpers.DataRandomizer.getRandomCity;
-import static automation_exercise.helpers.DataRandomizer.getRandomCompany;
-import static automation_exercise.helpers.DataRandomizer.getRandomCountry;
-import static automation_exercise.helpers.DataRandomizer.getRandomLastName;
-import static automation_exercise.helpers.DataRandomizer.getRandomMobile;
-import static automation_exercise.helpers.DataRandomizer.getRandomState;
-import static automation_exercise.helpers.DataRandomizer.getRandomZipCode;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
-public class UserFactory {
-    public static String userName = getRandomFirstName() + " " + getRandomLastName();
-    public static UserRegistrationData getUserForRegistration(){
-        String[] randomBirthday = getRandomBirthday();
-        return UserRegistrationData.builder()
-                .title(getRandomTitle())
-                .password(getRandomPassword())
-                .day(randomBirthday[0])
-                .month(randomBirthday[1])
-                .year(randomBirthday[2])
-                .firstName(getRandomFirstName())
-                .lastName(getRandomLastName())
-                .company(getRandomCompany())
-                .address1(getRandomAddress1())
-                .address2(getRandomAddress2())
-                .country(getRandomCountry())
-                .state(getRandomState())
-                .city(getRandomCity())
-                .zipcode(getRandomZipCode())
-                .mobile(getRandomMobile()).build();
-    }
-}
+//import static automation_exercise.helpers.DataRandomizer.*;
+
+//public class UserFactory {
+//    private static final Faker faker = new Faker();
+//    public static String userName = faker.name().firstName() + " " + faker.name().lastName();
+//    private static final List<String> titles = List.of("Mr", "Mrs");
+//    private static final List<String> country = List.of("India", "United States", "Canada", "Australia", "Israel", "New Zealand", "Singapore");
+
+//    public static UserRegistrationData getUserForRegistration(){
+//        String[] randomBirthday = getRandomBirthday();
+//        return UserRegistrationData.builder()
+//                .title(titles.get(new Random().nextInt(titles.size())))
+//                .password(faker.internet().password(true))
+//                .day(randomBirthday[0])
+//                .month(randomBirthday[1])
+//                .year(randomBirthday[2])
+//                .firstName(faker.name().firstName())
+//                .lastName(faker.name().lastName())
+//                .company(faker.company().name())
+//                .address1(faker.address().fullAddress())
+//                .address2(faker.address().secondaryAddress())
+//                .country(country.get(new Random().nextInt(country.size())))
+//                .state(faker.address().state())
+//                .city(faker.address().city())
+//                .zipcode(faker.address().zipCode())
+//                .mobile(faker.phoneNumber().phoneNumber()).build();
+//    }
+
+//    private static String[] getRandomBirthday() {
+//        Date birthday = faker.date().birthday(18, 70);
+//        LocalDate localDate = birthday.toInstant()
+//                .atZone(ZoneId.systemDefault())
+//                .toLocalDate();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH);
+//        String formatLocalDate = localDate.format(formatter);
+//        return formatLocalDate.split(" ");
+//    }
+
+//    public static String getRandomEmail() {
+//        UUID uuid = UUID.randomUUID();
+//        String emailPart = uuid.toString().substring(0, 4);
+//        return emailPart + "_" + faker.internet().emailAddress();
+//    }
+//}

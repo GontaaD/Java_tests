@@ -1,14 +1,19 @@
 package automation_exercise.pages;
 
 import automation_exercise.components.CartModal;
+import automation_exercise.interfaces.LocatorProvider;
 import automation_exercise.models.Product;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static automation_exercise.utils.AdsHelper.removeAds;
@@ -22,6 +27,22 @@ public class ProductsPage extends BasePage{
     private final By productNameLocator = By.xpath(".//p[1]");
     private final By addToCartButtonLocator = By.xpath(".//a[contains(@class, 'add-to-cart')][1]");
     private final By viewProductButtonLocator = By.xpath("//a[contains(@href, '/product_details/')]");
+
+    @Getter
+    @AllArgsConstructor
+    public enum ProductFields implements LocatorProvider {
+        IMAGE(By.xpath(".//img")),
+        PRICE(By.xpath(".//h2[1]")),
+        NAME(By.xpath(".//p[1]")),
+        ADD_BUTTON(By.xpath(".//a[contains(@class, 'add-to-cart')][1]")),
+        VIEW_BUTTON(By.xpath("//a[contains(@href, '/product_details/')]"));
+
+        private final By locator;
+    }
+
+    public List<WebElement> getAllElements(ProductFields field) {
+        return getDriver().findElements(field.getLocator());
+    }
 
     public WebElement findOrNull(WebElement container, By locator) {
         List<WebElement> elements = container.findElements(locator);
@@ -64,7 +85,7 @@ public class ProductsPage extends BasePage{
 
             products.add(product);
         }
-        return  products;
+        return products;
     }
 
     @Step("Set search product")

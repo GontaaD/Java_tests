@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProductQuantityInCurtTest extends BaseTest {
+public class ProductQuantityInCartTest extends BaseTest {
     ProductsPage productsPage;
     ProductDetailsPage productDetailsPage;
     CartPage cartPage;

@@ -25,6 +25,7 @@ public class CheckoutPage extends BasePage implements IProductInCart {
     @Step("Get delivery address")
     public CheckoutData getDeliveryAddress() {
         WebElement container = getDriver().findElement(deliveryAddressContainerLocator);
+
         return CheckoutData.builder()
                 .name(getTextOrNull(container, deliveryNameLocator))
                 .company(getTextOrNull(container, deliveryCompanyLocator))
@@ -45,7 +46,6 @@ public class CheckoutPage extends BasePage implements IProductInCart {
                 .address2(user.getAddress2())
                 .city(user.getCity() + " " + user.getState() + " " + user.getZipcode())
                 .country(user.getCountry())
-                .phone(user.getMobile())
                 .build();
     }
 

@@ -12,7 +12,7 @@ public class ExpectedProductBuilder {
     static {
         expectedProducts.put("blueTop", ProductInCart.builder()
                 .name("Blue Top")
-                .price("Rs. 500")
+                .price("Rs. 501")
                 .quantity("1")
                 .totalPrice("Rs. 500")
                 .build());
