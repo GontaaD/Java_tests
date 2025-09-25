@@ -29,21 +29,21 @@ public class RegistrationTest extends BaseTest {
                 .userRegisterWithDetails(user);
 
         assertThat(statusPage.isSuccessfullyCreatedAccount())
-                .as("ERROR: Failed create account")
+                .as("Failed create account")
                 .isTrue();
 
         statusPage
                 .clickContinueButton();
 
         assertThat(mainMenu.isUsernameVisible(user.getUsername()))
-                .as("ERROR: Username: " + user.getUsername() + " is not visible")
+                .as("Username: " + user.getUsername() + " is not visible")
                 .isTrue();
 
         mainMenu
                 .clickDeleteAccountButton();
 
         assertThat(statusPage.isDeleteSuccessfullyMassageIsVisible())
-                .as("ERROR: Delete successfully massage is not visible")
+                .as("Delete successfully massage is not visible")
                 .isTrue();
     }
 }

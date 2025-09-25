@@ -29,6 +29,7 @@ public class UserRegistrationData {
     private String mobile;
     private String email;
     private String username;
+    private String fullUsername;
 
     private static final Faker faker = new Faker();
     private static final String[] randomBirthday = getRandomBirthday();
@@ -53,7 +54,7 @@ public class UserRegistrationData {
         this.mobile = faker.phoneNumber().phoneNumber();
         this.username = this.firstName + " " + this.lastName;
         this.email = getRandomEmail();
-
+        this.fullUsername = this.title + ". " + this.username;
     }
 
     private static String[] getRandomBirthday() {

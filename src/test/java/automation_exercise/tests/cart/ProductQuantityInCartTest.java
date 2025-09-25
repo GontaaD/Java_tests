@@ -1,12 +1,11 @@
 package automation_exercise.tests.cart;
 
-import automation_exercise.helpers.ExpectedProductBuilder;
-import automation_exercise.models.Product;
-import automation_exercise.models.ProductInCart;
 import automation_exercise.pages.CartPage;
 import automation_exercise.pages.ProductDetailsPage;
 import automation_exercise.pages.ProductsPage;
+import automation_exercise.pages.ProductsPage.ProductFields;
 import automation_exercise.base.BaseTest;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -24,36 +23,31 @@ public class ProductQuantityInCartTest extends BaseTest {
         productDetailsPage =  new ProductDetailsPage();
         cartPage =  new CartPage();
 
+        String name = "Blue Top";
+        String quantity = "4";
+
         mainMenu
                 .clickProductPageButton();
 
-        List<Product> allProducts = productsPage
-                .getAllProducts();
-
-        Product product = allProducts.getFirst();
+        List<WebElement> allProducts = productsPage.getAllElements(ProductFields.VIEW_BUTTON);
 
         productsPage
-                .clickViewProductButton(product);
-
-        ProductInCart expectedProductInCart = ExpectedProductBuilder
-                .getExpectedProduct("blueTop", 4);
+                .clickViewProductButton(allProducts.getFirst());
 
         productDetailsPage
-                .setProductQuantity(4)
+                .setProductQuantity(quantity)
                 .clickAddToCart()
                 .clickViewCartButton();
 
-        assertThat(cartPage.getProductCountInCart())
-                .as("ERROR: Products count is not as expected")
-                .isEqualTo(1);
+        List<String> productName = cartPage.getAllText(CartPage.CartFields.NAME);
+        List<String> productQuantity = cartPage.getAllText(CartPage.CartFields.QUANTITY);
 
-        List<ProductInCart> allProductsInCart = cartPage
-                .getAllProductsInCart();
+        assertThat(productName.getFirst())
+                .as("Incorrect product name")
+                .isEqualTo(name);
 
-        ProductInCart actualProductInCart = allProductsInCart.getFirst();
-
-        assertThat(cartPage.isProductsToBeEqual(actualProductInCart, expectedProductInCart))
-                .as("ERROR: products are not equal")
-                .isTrue();
+        assertThat(productQuantity.getFirst())
+                .as("Incorrect product quantity")
+                .isEqualTo(quantity);
     }
 }

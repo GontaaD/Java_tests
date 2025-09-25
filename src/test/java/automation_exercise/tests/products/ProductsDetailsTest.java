@@ -1,10 +1,11 @@
 package automation_exercise.tests.products;
 
-import automation_exercise.models.Product;
-import automation_exercise.models.ProductDetails;
+import automation_exercise.pages.ProductDetailsPage.ProductDetailsFields;
+import automation_exercise.pages.ProductsPage.ProductFields;
 import automation_exercise.pages.ProductDetailsPage;
 import automation_exercise.pages.ProductsPage;
 import automation_exercise.base.BaseTest;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -15,6 +16,13 @@ public class ProductsDetailsTest extends BaseTest {
     ProductsPage productsPage;
     ProductDetailsPage productDetailsPage;
 
+    String name = "Blue Top";
+    String category = "Category: Women > Tops";
+    String price = "Rs. 500";
+    String availability = "In Stock";
+    String condition = "New";
+    String brand = "Polo";
+
     @Test
     public void checkProductDetailsTest(){
         productsPage =  new ProductsPage();
@@ -23,28 +31,40 @@ public class ProductsDetailsTest extends BaseTest {
         mainMenu
                 .clickProductPageButton();
 
-        List<Product> allProducts = productsPage
-                .getAllProducts();
-
-        Product product = allProducts.getFirst();
+        List<WebElement> allProducts = productsPage.getAllElements(ProductFields.VIEW_BUTTON);
 
         productsPage
-                .clickViewProductButton(product);
+                .clickViewProductButton(allProducts.getFirst());
 
-        ProductDetails actualProductDetails = productDetailsPage
-                .getProductDetails();
+        List<String> productName = productDetailsPage.getAllText(ProductDetailsFields.NAME);
+        List<String> productCategory = productDetailsPage.getAllText(ProductDetailsFields.CATEGORY);
+        List<String> productPrice = productDetailsPage.getAllText(ProductDetailsFields.PRICE);
+        List<String> productAvailability = productDetailsPage.getAllText(ProductDetailsFields.AVAILABILITY);
+        List<String> productCondition = productDetailsPage.getAllText(ProductDetailsFields.CONDITION);
+        List<String> productBrand = productDetailsPage.getAllText(ProductDetailsFields.BRAND);
 
-        ProductDetails expectedProductDetails = ProductDetails.builder()
-                .name("Blue Top")
-                .category("Category: Women > Tops")
-                .price("Rs. 500")
-                .availability("Availability: In Stock")
-                .condition("Condition: New")
-                .brand("Brand:Polo")
-                .build();
+        assertThat(productName.getFirst())
+                .as("Incorrect product name")
+                .isEqualTo(name);
 
-        assertThat(productDetailsPage.isProductDetailsToBeEquals(actualProductDetails,  expectedProductDetails))
-                .as("ERROR: Product details are not equals")
-                .isTrue();
+        assertThat(productCategory.getFirst())
+                .as("Incorrect product category")
+                .isEqualTo(category);
+
+        assertThat(productPrice.getFirst())
+                .as("Incorrect product price")
+                .isEqualTo(price);
+
+        assertThat(productAvailability.getFirst())
+                .as("Incorrect product availability")
+                .contains(availability);
+
+        assertThat(productCondition.getFirst())
+                .as("Incorrect product condition")
+                .contains(condition);
+
+        assertThat(productBrand.getFirst())
+                .as("Incorrect product brand")
+                .contains(brand);
     }
 }

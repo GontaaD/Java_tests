@@ -1,14 +1,13 @@
 package automation_exercise.tests.products;
 
-import automation_exercise.helpers.ExpectedProductBuilder;
-import automation_exercise.models.CheckoutData;
-import automation_exercise.models.Product;
-import automation_exercise.models.ProductInCart;
 import automation_exercise.models.UserRegistrationData;
 import automation_exercise.pages.*;
+import automation_exercise.pages.ProductsPage.ProductFields;
+import automation_exercise.pages.CheckoutPage.CheckoutFields;
 import automation_exercise.base.BaseTest;
 
 import com.github.javafaker.Faker;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -19,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class PlaceOrderTest extends BaseTest {
-    Faker faker = new Faker();
+    Faker faker;
     CreateAccountPage createAccountPage;
     ProductsPage productsPage;
     CheckoutPage checkoutPage;
@@ -35,7 +34,13 @@ public class PlaceOrderTest extends BaseTest {
         cartPage =  new CartPage();
         paymentPage =  new PaymentPage();
         statusPage =  new StatusPage();
+        faker = new Faker();
+
         UserRegistrationData user = new UserRegistrationData();
+        String name = "Blue Top";
+        String price = "Rs. 500";
+        String quantity = "1";
+        String totalPrice = "Rs. 500";
 
         mainMenu
                 .clickLoginPageButton()
@@ -54,36 +59,62 @@ public class PlaceOrderTest extends BaseTest {
         mainMenu
                 .clickProductPageButton();
 
-        List<Product> allProducts = productsPage
-                .getAllProducts();
-
-        Product product = allProducts.getFirst();
+        List<WebElement> allProducts = productsPage
+                .getAllElements(ProductFields.ADD_BUTTON);
 
         productsPage
-                .clickAddToCartButton(product)
+                .clickAddToCartButton(allProducts.getFirst())
                 .clickViewCartButton()
                 .clickCheckoutButton();
 
-        CheckoutData actualCheckoutData = checkoutPage.getDeliveryAddress();
-        CheckoutData expectedCheckoutData = checkoutPage.getExpectedCheckoutData(user);
+        assertThat(checkoutPage.getText(CheckoutFields.NAME))
+                .as("Name is incorrect")
+                .isEqualTo(user.getFullUsername());
 
-        assertThat(checkoutPage.isDeliveryAddressToBeEqual(actualCheckoutData, expectedCheckoutData))
-                .as("Checkout data are not equal")
-                .isTrue();
+        assertThat(checkoutPage.getText(CheckoutFields.COMPANY))
+                .as("Company is incorrect")
+                .isEqualTo(user.getCompany());
 
-        List<ProductInCart> allProductsInCart = checkoutPage
-                .getAllProductsInCart();
+        assertThat(checkoutPage.getText(CheckoutFields.ADDRESS1))
+                .as("Address1 is incorrect")
+                .isEqualTo(user.getAddress1());
 
-        assertThat(allProductsInCart.size())
-                .as("ERROR: The number of products in cart is not equal to expected")
+        assertThat(checkoutPage.getText(CheckoutFields.ADDRESS2))
+                .as("Address2 is incorrect")
+                .isEqualTo(user.getAddress2());
+
+        assertThat(checkoutPage.getText(CheckoutFields.CITY))
+                .as("City is incorrect")
+                .isEqualTo(user.getCity() + " " + user.getState() + " " + user.getZipcode());
+
+        assertThat(checkoutPage.getText(CheckoutFields.COUNTRY))
+                .as("Country is incorrect")
+                .isEqualTo(user.getCountry());
+
+        List<String> productName = checkoutPage.getAllText(CheckoutPage.CartFields.NAME);
+        List<String> productPrice = checkoutPage.getAllText(CheckoutPage.CartFields.PRICE);
+        List<String> productQuantity = checkoutPage.getAllText(CheckoutPage.CartFields.QUANTITY);
+        List<String> productTotalPrice = checkoutPage.getAllText(CheckoutPage.CartFields.TOTAL_PRICE);
+
+        assertThat(productName.size())
+                .as("The number of products in cart is not equal to expected")
                 .isEqualTo(1);
 
-        ProductInCart actualProductInCart = cartPage.filterProducts(allProductsInCart, "Blue Top");
-        ProductInCart expectedProductInCart = ExpectedProductBuilder.getExpectedProduct("blueTop", 1);
+        assertThat(productName.getFirst())
+                .as("Name is incorrect")
+                .isEqualTo(name);
 
-        assertThat(cartPage.isProductsToBeEqual(actualProductInCart, expectedProductInCart))
-                .as("ERROR: Products are not equal")
-                .isTrue();
+        assertThat(productPrice.getFirst())
+                .as("Price is incorrect")
+                .isEqualTo(price);
+
+        assertThat(productQuantity.getFirst())
+                .as("Quantity is incorrect")
+                .isEqualTo(quantity);
+
+        assertThat(productTotalPrice.getFirst())
+                .as("Total price is incorrect")
+                .isEqualTo(totalPrice);
 
         checkoutPage
                 .clickPaymentButton()
@@ -96,7 +127,7 @@ public class PlaceOrderTest extends BaseTest {
                 .clickSubmitOrderButton();
 
         assertThat(paymentPage.isSuccessfullyOrderMessageIsVisible())
-                .as("Error: Successfully order message is not visible")
+                .as("Successfully order message is not visible")
                 .isTrue();
 
         statusPage
@@ -106,7 +137,7 @@ public class PlaceOrderTest extends BaseTest {
                 .clickDeleteAccountButton();
 
         assertThat(statusPage.isDeleteSuccessfullyMassageIsVisible())
-                .as("ERROR: Delete successfully massage is not visible")
+                .as("Delete successfully massage is not visible")
                 .isTrue();
     }
 }

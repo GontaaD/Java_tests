@@ -1,12 +1,18 @@
 package automation_exercise.pages;
 
+import automation_exercise.interfaces.LocatorProvider;
 import automation_exercise.models.CheckoutData;
 import automation_exercise.models.UserRegistrationData;
 import automation_exercise.interfaces.IProductInCart;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static automation_exercise.utils.AdsHelper.removeAds;
@@ -21,6 +27,24 @@ public class CheckoutPage extends BasePage implements IProductInCart {
     private final By deliveryCountryLocator = By.xpath(".//li[@class='address_country_name']");
     private final By deliveryPhoneLocator = By.xpath(".//li[@class='address_phone']");
     private final By paymentButtonLocator = By.xpath("//a[@href='/payment']");
+
+    @Getter
+    @AllArgsConstructor
+    public enum CheckoutFields implements LocatorProvider {
+        NAME(By.xpath("//ul[@id='address_delivery']//li[contains(@class, 'address_firstname')]")),
+        COMPANY(By.xpath("//ul[@id='address_delivery']//li[contains(@class, 'address_address1')][1]")),
+        ADDRESS1(By.xpath("//ul[@id='address_delivery']//li[contains(@class, 'address_address1')][2]")),
+        ADDRESS2(By.xpath("//ul[@id='address_delivery']//li[contains(@class, 'address_address1')][3]")),
+        CITY(By.xpath("//ul[@id='address_delivery']//li[contains(@class, 'address_city')]")),
+        COUNTRY(By.xpath("//ul[@id='address_delivery']//li[@class='address_country_name']"));
+
+        private final By locator;
+    }
+
+    public String getText(CheckoutFields field) {
+        WebElement element = getDriver().findElement(field.getLocator());
+        return element.getText();
+    }
 
     @Step("Get delivery address")
     public CheckoutData getDeliveryAddress() {

@@ -21,7 +21,7 @@ public class CartPage extends BasePage implements IProductInCart {
     private final By proceedToCheckoutButton = By.xpath("//a[contains(@class, 'check_out')]");
 
     @Step("Click delete from cart button")
-    public CartPage clickDeleteFromCartButton(){
+    public CartPage clickDeleteFromCartButton() {
         logger.info("Click [delete product from cart] button");
         waitUntilVisibilityOfElementLocated(productDeleteFromCartButtonLocator).click();
         return this;

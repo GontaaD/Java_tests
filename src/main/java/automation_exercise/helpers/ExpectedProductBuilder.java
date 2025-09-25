@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExpectedProductBuilder {
+    private String name;
+    private String price;
+    private String quantity;
+    private String totalPrice;
+
     private static final Map<String, ProductInCart> expectedProducts = new HashMap<>();
 
     static {

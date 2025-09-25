@@ -1,12 +1,19 @@
 package automation_exercise.pages;
 
 import automation_exercise.components.CartModal;
+import automation_exercise.interfaces.LocatorProvider;
 import automation_exercise.models.ProductDetails;
+import automation_exercise.utils.ListUtil;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,12 +27,53 @@ public class ProductDetailsPage extends BasePage{
     private final By productQuantityInputLocator = By.xpath("//input[@id='quantity']");
     private final By productAddToCartLocator = By.xpath("//button[contains(@class, 'cart')]");
 
+    @Getter
+    @AllArgsConstructor
+    public enum ProductDetailsFields implements LocatorProvider {
+        NAME(By.xpath("//div[@class='product-information']//h2")),
+        CATEGORY(By.xpath("//div[@class='product-information']//p[1]")),
+        PRICE(By.xpath("//div[@class='product-information']//span//span")),
+        AVAILABILITY(By.xpath("//div[@class='product-information']//p[2]")),
+        CONDITION(By.xpath("//div[@class='product-information']//p[3]")),
+        BRAND(By.xpath("//div[@class='product-information']//p[4]")),
+        QUANTITY(By.xpath("//input[@id='quantity']"));
+
+        private final By locator;
+    }
+
+    public List<WebElement> getAllElements(ProductDetailsFields field) {
+        return getDriver().findElements(field.getLocator());
+    }
+
+    public List<String> getAllText(ProductDetailsFields field) {
+        return getDriver().findElements(field.getLocator()).stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+    }
+
+
+    public WebElement findOrNull(WebElement container, By locator) {
+        List<WebElement> elements = container.findElements(locator);
+        return elements.isEmpty() ? null : elements.getFirst();
+    }
+
+//    public String getTextNode(WebElement element) {
+//        return (String) ((JavascriptExecutor) BasePage.getDriver())
+//                .executeScript(
+//                        "return Array.from(arguments[0].childNodes)" +
+//                                ".filter(n => n.nodeType === Node.TEXT_NODE)" +
+//                                ".map(n => n.textContent.trim()).join('');",
+//                        element
+//                );
+//    }
+
     public String getTextNode(WebElement element) {
         return (String) ((JavascriptExecutor) BasePage.getDriver())
                 .executeScript(
                         "return Array.from(arguments[0].childNodes)" +
-                                ".filter(n => n.nodeType === Node.TEXT_NODE)" +
-                                ".map(n => n.textContent.trim()).join('');",
+                                ".filter(n => n.nodeType === Node.TEXT_NODE || n.nodeType === Node.ELEMENT_NODE)" +
+                                ".map(n => n.nodeType === Node.TEXT_NODE ? n.textContent.trim() : n.textContent.trim())" +
+                                ".join('');",
                         element
                 );
     }
@@ -43,7 +91,7 @@ public class ProductDetailsPage extends BasePage{
     }
 
     @Step("Set product quantity")
-    public ProductDetailsPage setProductQuantity(int quantity) {
+    public ProductDetailsPage setProductQuantity(String quantity) {
         logger.info("Set quantity to [{}]", quantity);
         WebElement input = waitUntilVisibilityOfElementLocated(productQuantityInputLocator);
         input.clear();

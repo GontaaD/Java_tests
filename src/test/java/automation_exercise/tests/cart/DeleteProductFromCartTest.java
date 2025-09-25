@@ -1,9 +1,10 @@
 package automation_exercise.tests.cart;
 
-import automation_exercise.models.Product;
 import automation_exercise.pages.CartPage;
 import automation_exercise.pages.ProductsPage;
+import automation_exercise.pages.ProductsPage.ProductFields;
 import automation_exercise.base.BaseTest;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -22,20 +23,17 @@ public class DeleteProductFromCartTest extends BaseTest {
         mainMenu
                 .clickProductPageButton();
 
-        List<Product> allProducts = productsPage
-                .getAllProducts();
-
-        Product product = allProducts.getFirst();
+        List<WebElement> allProducts = productsPage.getAllElements(ProductFields.ADD_BUTTON);
 
         productsPage
-                .clickAddToCartButton(product)
+                .clickAddToCartButton(allProducts.getFirst())
                 .clickViewCartButton();
 
         cartPage
                 .clickDeleteFromCartButton();
 
         assertThat(cartPage.isCartIsEmpty())
-                .as("ERROR: Cart should be empty, but it is not")
+                .as("Cart should be empty, but it is not")
                 .isTrue();
     }
 }

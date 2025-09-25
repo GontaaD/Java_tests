@@ -26,7 +26,7 @@ public class LoginLogoutTest extends BaseTest {
     @Test
     public void loginTest(){
         assertThat(mainMenu.isUsernameVisible("test"))
-                .as("ERROR: Username: test, is not visible")
+                .as("Username: test, is not visible")
                 .isTrue();
     }
 
@@ -38,7 +38,7 @@ public class LoginLogoutTest extends BaseTest {
                 .clickLogoutButton();
 
         assertThat(loginPage.isLoginPageSuccessfullyLoaded())
-                .as("ERROR: Login page is displayed")
+                .as("Login page is displayed")
                 .isTrue();
     }
 }

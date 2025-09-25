@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static automation_exercise.utils.AdsHelper.removeAds;
@@ -31,17 +32,25 @@ public class ProductsPage extends BasePage{
     @Getter
     @AllArgsConstructor
     public enum ProductFields implements LocatorProvider {
-        IMAGE(By.xpath(".//img")),
-        PRICE(By.xpath(".//h2[1]")),
-        NAME(By.xpath(".//p[1]")),
-        ADD_BUTTON(By.xpath(".//a[contains(@class, 'add-to-cart')][1]")),
-        VIEW_BUTTON(By.xpath("//a[contains(@href, '/product_details/')]"));
+        IMAGE(By.xpath("//div[@class='product-image-wrapper']//img")),
+        PRICE(By.xpath("//div[@class='product-image-wrapper']//div[@class='productinfo text-center']//h2")),
+        NAME(By.xpath("//div[@class='product-image-wrapper']//div[@class='productinfo text-center']//p")),
+        ADD_BUTTON(By.xpath("//div[@class='product-image-wrapper']//a[contains(@class, 'add-to-cart')][1]")),
+        VIEW_BUTTON(By.xpath("//div[@class='product-image-wrapper']//a[contains(@href, '/product_details/')]"));
 
         private final By locator;
     }
 
     public List<WebElement> getAllElements(ProductFields field) {
-        return getDriver().findElements(field.getLocator());
+        return getDriver().findElements(field.getLocator()).stream()
+                .filter(e -> e.isDisplayed() && e.isEnabled())
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAllText(ProductFields field) {
+        return getDriver().findElements(field.getLocator()).stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     public WebElement findOrNull(WebElement container, By locator) {
@@ -103,18 +112,18 @@ public class ProductsPage extends BasePage{
     }
 
     @Step("Click view product button")
-    public ProductDetailsPage clickViewProductButton(Product product){
+    public ProductDetailsPage clickViewProductButton(WebElement product){
         logger.info("Click [view product] button");
-        product.getViewProductButton().click();
+        product.click();
         removeAds();
         return new ProductDetailsPage();
     }
 
     @Step("Click add to cart button")
-    public CartModal clickAddToCartButton(Product product){
+    public CartModal clickAddToCartButton(WebElement product){
         logger.info("Click [add to cart] button");
         removeAds();
-        product.getAddToCartButton().click();
+        product.click();
         return new CartModal();
     }
 
