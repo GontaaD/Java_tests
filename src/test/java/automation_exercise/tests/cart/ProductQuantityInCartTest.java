@@ -29,18 +29,18 @@ public class ProductQuantityInCartTest extends BaseTest {
         mainMenu
                 .clickProductPageButton();
 
-        List<WebElement> allProducts = productsPage.getAllElements(ProductFields.VIEW_BUTTON);
+        List<WebElement> allProducts = productsPage.getAllElementsFromProducts(ProductFields.VIEW_BUTTON);
 
         productsPage
                 .clickViewProductButton(allProducts.getFirst());
 
         productDetailsPage
                 .setProductQuantity(quantity)
-                .clickAddToCart()
+                .clickAddToCartButton()
                 .clickViewCartButton();
 
-        List<String> productName = cartPage.getAllText(CartPage.CartFields.NAME);
-        List<String> productQuantity = cartPage.getAllText(CartPage.CartFields.QUANTITY);
+        List<String> productName = cartPage.getAllTextFromCart(CartPage.CartFields.NAME);
+        List<String> productQuantity = cartPage.getAllTextFromCart(CartPage.CartFields.QUANTITY);
 
         assertThat(productName.getFirst())
                 .as("Incorrect product name")

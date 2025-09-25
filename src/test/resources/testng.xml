@@ -8,7 +8,7 @@
         <classes>
             <class name="automation_exercise.tests.cart.AddToCartProductTest"/>
             <class name="automation_exercise.tests.cart.DeleteProductFromCartTest"/>
-            <class name="automation_exercise.tests.cart.ProductQuantityInCurtTest"/>
+            <class name="automation_exercise.tests.cart.ProductQuantityInCartTest"/>
         </classes>
     </test>
 

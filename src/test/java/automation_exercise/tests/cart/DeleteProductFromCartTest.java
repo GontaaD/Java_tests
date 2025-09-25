@@ -23,7 +23,7 @@ public class DeleteProductFromCartTest extends BaseTest {
         mainMenu
                 .clickProductPageButton();
 
-        List<WebElement> allProducts = productsPage.getAllElements(ProductFields.ADD_BUTTON);
+        List<WebElement> allProducts = productsPage.getAllElementsFromProducts(ProductFields.ADD_BUTTON);
 
         productsPage
                 .clickAddToCartButton(allProducts.getFirst())
@@ -32,7 +32,7 @@ public class DeleteProductFromCartTest extends BaseTest {
         cartPage
                 .clickDeleteFromCartButton();
 
-        assertThat(cartPage.isCartIsEmpty())
+        assertThat(cartPage.isCartEmpty())
                 .as("Cart should be empty, but it is not")
                 .isTrue();
     }

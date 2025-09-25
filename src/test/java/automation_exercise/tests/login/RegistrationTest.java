@@ -26,7 +26,7 @@ public class RegistrationTest extends BaseTest {
                 .clickSignupButton();
 
         createAccountPage
-                .userRegisterWithDetails(user);
+                .inputUserDataForRegistration(user);
 
         assertThat(statusPage.isSuccessfullyCreatedAccount())
                 .as("Failed create account")

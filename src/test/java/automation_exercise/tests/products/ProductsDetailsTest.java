@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.FILE;
 
 public class ProductsDetailsTest extends BaseTest {
     ProductsPage productsPage;
@@ -31,39 +32,39 @@ public class ProductsDetailsTest extends BaseTest {
         mainMenu
                 .clickProductPageButton();
 
-        List<WebElement> allProducts = productsPage.getAllElements(ProductFields.VIEW_BUTTON);
+        List<WebElement> allProducts = productsPage.getAllElementsFromProducts(ProductFields.VIEW_BUTTON);
 
         productsPage
                 .clickViewProductButton(allProducts.getFirst());
 
-        List<String> productName = productDetailsPage.getAllText(ProductDetailsFields.NAME);
-        List<String> productCategory = productDetailsPage.getAllText(ProductDetailsFields.CATEGORY);
-        List<String> productPrice = productDetailsPage.getAllText(ProductDetailsFields.PRICE);
-        List<String> productAvailability = productDetailsPage.getAllText(ProductDetailsFields.AVAILABILITY);
-        List<String> productCondition = productDetailsPage.getAllText(ProductDetailsFields.CONDITION);
-        List<String> productBrand = productDetailsPage.getAllText(ProductDetailsFields.BRAND);
+        String productName = productDetailsPage.getTextFromProductDetails(ProductDetailsFields.NAME);
+        String productCategory = productDetailsPage.getTextFromProductDetails(ProductDetailsFields.CATEGORY);
+        String productPrice = productDetailsPage.getTextFromProductDetails(ProductDetailsFields.PRICE);
+        String productAvailability = productDetailsPage.getTextFromProductDetails(ProductDetailsFields.AVAILABILITY);
+        String productCondition = productDetailsPage.getTextFromProductDetails(ProductDetailsFields.CONDITION);
+        String productBrand = productDetailsPage.getTextFromProductDetails(ProductDetailsFields.BRAND);
 
-        assertThat(productName.getFirst())
+        assertThat(productName)
                 .as("Incorrect product name")
                 .isEqualTo(name);
 
-        assertThat(productCategory.getFirst())
+        assertThat(productCategory)
                 .as("Incorrect product category")
                 .isEqualTo(category);
 
-        assertThat(productPrice.getFirst())
+        assertThat(productPrice)
                 .as("Incorrect product price")
                 .isEqualTo(price);
 
-        assertThat(productAvailability.getFirst())
+        assertThat(productAvailability)
                 .as("Incorrect product availability")
                 .contains(availability);
 
-        assertThat(productCondition.getFirst())
+        assertThat(productCondition)
                 .as("Incorrect product condition")
                 .contains(condition);
 
-        assertThat(productBrand.getFirst())
+        assertThat(productBrand)
                 .as("Incorrect product brand")
                 .contains(brand);
     }

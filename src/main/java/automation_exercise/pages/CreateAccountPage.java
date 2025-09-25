@@ -158,8 +158,8 @@ public class CreateAccountPage extends BasePage {
         return new StatusPage();
     }
 
-    @Step("userRegisterWithDetails")
-    public StatusPage userRegisterWithDetails(UserRegistrationData user) {
+    @Step("Input user data for registration")
+    public StatusPage inputUserDataForRegistration(UserRegistrationData user) {
         removeAds();
         return this
                 .clickGenderRadioButton(user.getTitle())

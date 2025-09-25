@@ -23,7 +23,7 @@ public class SearchProductTest extends BaseTest {
                 .setSearchProduct(filter)
                 .clickSubmitSearchButton();
 
-        List<String> productNames = productsPage.getAllText(ProductsPage.ProductFields.NAME);
+        List<String> productNames = productsPage.getAllTextFromProducts(ProductsPage.ProductFields.NAME);
 
         assertThat(productNames)
                 .as("The product does not match the filter")

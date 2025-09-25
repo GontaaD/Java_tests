@@ -49,7 +49,7 @@ public class PlaceOrderTest extends BaseTest {
                 .clickSignupButton();
 
         createAccountPage
-                .userRegisterWithDetails(user)
+                .inputUserDataForRegistration(user)
                 .clickContinueButton();
 
         assertThat(mainMenu.isUsernameVisible(user.getUsername()))
@@ -60,41 +60,41 @@ public class PlaceOrderTest extends BaseTest {
                 .clickProductPageButton();
 
         List<WebElement> allProducts = productsPage
-                .getAllElements(ProductFields.ADD_BUTTON);
+                .getAllElementsFromProducts(ProductFields.ADD_BUTTON);
 
         productsPage
                 .clickAddToCartButton(allProducts.getFirst())
                 .clickViewCartButton()
-                .clickCheckoutButton();
+                .clickOpenCheckoutButton();
 
-        assertThat(checkoutPage.getText(CheckoutFields.NAME))
+        assertThat(checkoutPage.getTextFromCheckout(CheckoutFields.NAME))
                 .as("Name is incorrect")
-                .isEqualTo(user.getFullUsername());
+                .isEqualTo(user.getTitle() + ". " + user.getUsername());
 
-        assertThat(checkoutPage.getText(CheckoutFields.COMPANY))
+        assertThat(checkoutPage.getTextFromCheckout(CheckoutFields.COMPANY))
                 .as("Company is incorrect")
                 .isEqualTo(user.getCompany());
 
-        assertThat(checkoutPage.getText(CheckoutFields.ADDRESS1))
+        assertThat(checkoutPage.getTextFromCheckout(CheckoutFields.ADDRESS1))
                 .as("Address1 is incorrect")
                 .isEqualTo(user.getAddress1());
 
-        assertThat(checkoutPage.getText(CheckoutFields.ADDRESS2))
+        assertThat(checkoutPage.getTextFromCheckout(CheckoutFields.ADDRESS2))
                 .as("Address2 is incorrect")
                 .isEqualTo(user.getAddress2());
 
-        assertThat(checkoutPage.getText(CheckoutFields.CITY))
+        assertThat(checkoutPage.getTextFromCheckout(CheckoutFields.CITY))
                 .as("City is incorrect")
                 .isEqualTo(user.getCity() + " " + user.getState() + " " + user.getZipcode());
 
-        assertThat(checkoutPage.getText(CheckoutFields.COUNTRY))
+        assertThat(checkoutPage.getTextFromCheckout(CheckoutFields.COUNTRY))
                 .as("Country is incorrect")
                 .isEqualTo(user.getCountry());
 
-        List<String> productName = checkoutPage.getAllText(CheckoutPage.CartFields.NAME);
-        List<String> productPrice = checkoutPage.getAllText(CheckoutPage.CartFields.PRICE);
-        List<String> productQuantity = checkoutPage.getAllText(CheckoutPage.CartFields.QUANTITY);
-        List<String> productTotalPrice = checkoutPage.getAllText(CheckoutPage.CartFields.TOTAL_PRICE);
+        List<String> productName = checkoutPage.getAllTextFromCart(CheckoutPage.CartFields.NAME);
+        List<String> productPrice = checkoutPage.getAllTextFromCart(CheckoutPage.CartFields.PRICE);
+        List<String> productQuantity = checkoutPage.getAllTextFromCart(CheckoutPage.CartFields.QUANTITY);
+        List<String> productTotalPrice = checkoutPage.getAllTextFromCart(CheckoutPage.CartFields.TOTAL_PRICE);
 
         assertThat(productName.size())
                 .as("The number of products in cart is not equal to expected")
