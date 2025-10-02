@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 import java.time.Duration;
 
-import static automation_exercise.utils.AdsHelper.removeAds;
+import static automation_exercise.utils.AdsRemove.removeAds;
 
 public class LoginPage extends BasePage {
     private final By loginTitleLocator = By.xpath("//h2[text()='New User Signup!']");

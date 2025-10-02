@@ -33,7 +33,7 @@ public class UserRegistrationData {
     private static final Faker faker = new Faker();
     private static final String[] randomBirthday = getRandomBirthday();
     private static final List<String> titles = List.of("Mr", "Mrs");
-    private static final List<String> countrys = List.of("India", "United States", "Canada", "Australia", "Israel", "New Zealand", "Singapore");
+    private static final List<String> countries = List.of("India", "United States", "Canada", "Australia", "Israel", "New Zealand", "Singapore");
 
     public UserRegistrationData() {
         this.title = titles.get(new Random().nextInt(titles.size()));
@@ -46,7 +46,7 @@ public class UserRegistrationData {
         this.company = faker.company().name();
         this.address1 = faker.address().streetAddress();
         this.address2 = faker.address().secondaryAddress();
-        this.country = countrys.get(new Random().nextInt(countrys.size()));
+        this.country = countries.get(new Random().nextInt(countries.size()));
         this.state = faker.address().state();
         this.city = faker.address().city();
         this.zipcode = faker.address().zipCode();

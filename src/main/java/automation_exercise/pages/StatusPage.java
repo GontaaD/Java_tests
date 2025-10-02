@@ -4,7 +4,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import java.time.Duration;
-import static automation_exercise.utils.AdsHelper.removeAds;
+import static automation_exercise.utils.AdsRemove.removeAds;
 
 public class StatusPage extends BasePage{
     private final By createdAccountSuccessfullyMassage = By.xpath("//b[text()='Account Created!']");

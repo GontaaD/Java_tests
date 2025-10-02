@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
-import static automation_exercise.utils.AdsHelper.removeAds;
+import static automation_exercise.utils.AdsRemove.removeAds;
 
 public class CreateAccountPage extends BasePage {
     private final By mrRadioButtonLocator = By.xpath("//div[@id='uniform-id_gender1']");

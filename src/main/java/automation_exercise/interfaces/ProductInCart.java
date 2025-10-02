@@ -1,6 +1,6 @@
 package automation_exercise.interfaces;
 
-import automation_exercise.utils.ListUtil;
+import automation_exercise.utils.TextNodeGetter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openqa.selenium.By;
@@ -26,7 +26,7 @@ public interface ProductInCart {
 
     default List<String> getAllTextFromCart(CartFields field) {
         return getDriver().findElements(field.getLocator()).stream()
-                .map(ListUtil::getTextNode)
+                .map(TextNodeGetter::getTextNode)
                 .collect(Collectors.toList());
     }
 

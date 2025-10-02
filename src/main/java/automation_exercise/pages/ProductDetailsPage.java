@@ -2,7 +2,7 @@ package automation_exercise.pages;
 
 import automation_exercise.components.CartModal;
 import automation_exercise.interfaces.LocatorProvider;
-import automation_exercise.utils.ListUtil;
+import automation_exercise.utils.TextNodeGetter;
 import io.qameta.allure.Step;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class ProductDetailsPage extends BasePage {
     public String getTextFromProductDetails(ProductDetailsFields field) {
         try {
             WebElement element = getDriver().findElement(field.getLocator());
-            return ListUtil.getTextNode(element);
+            return TextNodeGetter.getTextNode(element);
         } catch (NoSuchElementException e) {
             return null;
         }

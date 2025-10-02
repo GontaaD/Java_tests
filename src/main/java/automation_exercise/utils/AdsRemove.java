@@ -11,7 +11,7 @@ import java.time.Duration;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-public class AdsHelper extends BasePage {
+public class AdsRemove extends BasePage {
     private static final By googleAdsLocator = By.xpath("//ins[@data-anchor-status='displayed' and @data-adsbygoogle-status='done']");
 
     public static void removeAds() {

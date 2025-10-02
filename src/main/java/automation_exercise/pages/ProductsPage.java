@@ -2,7 +2,7 @@ package automation_exercise.pages;
 
 import automation_exercise.components.CartModal;
 import automation_exercise.interfaces.LocatorProvider;
-import automation_exercise.utils.ListUtil;
+import automation_exercise.utils.TextNodeGetter;
 import io.qameta.allure.Step;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static automation_exercise.utils.AdsHelper.removeAds;
+import static automation_exercise.utils.AdsRemove.removeAds;
 
 public class ProductsPage extends BasePage {
     private final By searchProductInputLocator = By.xpath("//input[@id='search_product']");
@@ -37,7 +37,7 @@ public class ProductsPage extends BasePage {
 
     public List<String> getAllTextFromProducts(ProductFields field) {
         return getDriver().findElements(field.getLocator()).stream()
-                .map(ListUtil::getTextNode)
+                .map(TextNodeGetter::getTextNode)
                 .collect(Collectors.toList());
     }
 

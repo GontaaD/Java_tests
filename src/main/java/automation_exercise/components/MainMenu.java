@@ -4,7 +4,7 @@ import automation_exercise.pages.*;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
-import static automation_exercise.utils.AdsHelper.removeAds;
+import static automation_exercise.utils.AdsRemove.removeAds;
 
 public class MainMenu extends BasePage {
     private final By loginButtonLocator = By.xpath("//a[@href='/login']");

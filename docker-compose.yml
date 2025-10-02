@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  selenium:
+    image: selenium/standalone-chrome:115.0
+    container_name: selenium
+    shm_size: 2g
+    ports:
+      - "4444:4444"
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: java_tests
+    depends_on:
+      - selenium
+    environment:
+      SELENIUM_URL: "http://selenium:4444/wd/hub"
+    volumes:
+      - ./target:/app/target
+      - ./allure-results:/app/allure-results
+    working_dir: /app
+    command: ["mvn", "clean", "test", "-DsuiteXmlFile=src/test/resources/testng.xml"]
