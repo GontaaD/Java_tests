@@ -1,6 +1,7 @@
 package automation_exercise.base;
 
 import automation_exercise.components.MainMenu;
+import automation_exercise.driver.DriverFactory;
 import automation_exercise.pages.*;
 import automation_exercise.listeners.TestListener;
 import org.openqa.selenium.WebDriver;
@@ -21,11 +22,12 @@ public abstract class BaseTest {
     protected MainMenu mainMenu;
 
     @BeforeMethod(alwaysRun = true)
-    public synchronized void startBrowser(){
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-
-        WebDriver driver = new ChromeDriver(options);
+    public synchronized void startBrowser() throws Exception {
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--start-maximized");
+//
+//        WebDriver driver = new ChromeDriver(options);
+        WebDriver driver = DriverFactory.createDriver();
         BasePage.setDriver(driver);
 
         BasePage.getDriver().get("https://www.automationexercise.com/");
@@ -38,6 +40,15 @@ public abstract class BaseTest {
     @AfterMethod(alwaysRun = true)
     public void quit(){
 //        if(BasePage.getDriverThreadLocal() != null) {
+//            BasePage.getDriver().quit();
+        if (BasePage.getDriver() != null) {
             BasePage.getDriver().quit();
+        }
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

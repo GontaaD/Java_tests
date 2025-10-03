@@ -1,10 +1,11 @@
-version: "3.8"
+version: "3.9"
 
 services:
   selenium:
     image: selenium/standalone-chrome:115.0
     container_name: selenium
     shm_size: 2g
+    platform: linux/amd64
     ports:
       - "4444:4444"
 
@@ -15,10 +16,31 @@ services:
     container_name: java_tests
     depends_on:
       - selenium
-    environment:
-      SELENIUM_URL: "http://selenium:4444/wd/hub"
+    env_file:
+      - .env
     volumes:
-      - ./target:/app/target
-      - ./allure-results:/app/allure-results
+      - ./target/allure-results:/app/target/allure-results
+      - ./target/allure-report:/app/target/allure-report
     working_dir: /app
-    command: ["mvn", "clean", "test", "-DsuiteXmlFile=src/test/resources/testng.xml"]
+    environment:
+      SELENIUM_URL: "${SELENIUM_URL}"
+    ports:
+      - "8080:8080"
+    command: >
+      sh -c "mvn test -DsuiteXmlFile=src/test/resources/testng.xml &&
+             mvn allure:report"
+#  tests:
+#    image: java_tests-tests:latest  # готовий образ з тестами та Allure
+#    container_name: java_tests
+#    depends_on:
+#      - selenium
+#    environment:
+#      SELENIUM_URL: "http://selenium:4444"  # Selenium всередині Docker-мережі
+#    ports:
+#      - "8080:8080"  # Allure доступний на хості
+#    command: >
+#      sh -c "
+#        mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml &&
+#        allure generate target/allure-results -o target/allure-report --clean &&
+#        allure open target/allure-report --port 8080 --host 0.0.0.0
+#      "
